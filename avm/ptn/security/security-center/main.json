@@ -1,11 +1,12 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "languageVersion": "2.0",
   "contentVersion": "1.0.0.0",
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.26.54.24096",
-      "templateHash": "5215368682061207752"
+      "version": "0.27.1.19265",
+      "templateHash": "18297664756616898149"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -192,6 +193,17 @@
         "description": "Optional. The pricing tier value for CosmosDbs. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
       }
     },
+    "virtualMachinesSubPlan": {
+      "type": "string",
+      "nullable": true,
+      "allowedValues": [
+        "P1",
+        "P2"
+      ],
+      "metadata": {
+        "description": "Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are \"P1\" & \"P2\", where for resource level only \"P1\" sub plan is supported."
+      }
+    },
     "securityContactProperties": {
       "type": "object",
       "defaultValue": {},
@@ -218,60 +230,73 @@
     "pricings": [
       {
         "name": "VirtualMachines",
-        "pricingTier": "[parameters('virtualMachinesPricingTier')]"
+        "pricingTier": "[parameters('virtualMachinesPricingTier')]",
+        "subPlan": "[parameters('virtualMachinesSubPlan')]"
       },
       {
         "name": "SqlServers",
-        "pricingTier": "[parameters('sqlServersPricingTier')]"
+        "pricingTier": "[parameters('sqlServersPricingTier')]",
+        "subPlan": "null"
       },
       {
         "name": "AppServices",
-        "pricingTier": "[parameters('appServicesPricingTier')]"
+        "pricingTier": "[parameters('appServicesPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "StorageAccounts",
-        "pricingTier": "[parameters('storageAccountsPricingTier')]"
+        "pricingTier": "[parameters('storageAccountsPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "SqlServerVirtualMachines",
-        "pricingTier": "[parameters('sqlServerVirtualMachinesPricingTier')]"
+        "pricingTier": "[parameters('sqlServerVirtualMachinesPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "KubernetesService",
-        "pricingTier": "[parameters('kubernetesServicePricingTier')]"
+        "pricingTier": "[parameters('kubernetesServicePricingTier')]",
+        "subPlan": null
       },
       {
         "name": "ContainerRegistry",
-        "pricingTier": "[parameters('containerRegistryPricingTier')]"
+        "pricingTier": "[parameters('containerRegistryPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "KeyVaults",
-        "pricingTier": "[parameters('keyVaultsPricingTier')]"
+        "pricingTier": "[parameters('keyVaultsPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "Dns",
-        "pricingTier": "[parameters('dnsPricingTier')]"
+        "pricingTier": "[parameters('dnsPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "Arm",
-        "pricingTier": "[parameters('armPricingTier')]"
+        "pricingTier": "[parameters('armPricingTier')]",
+        "subPlan": null
       },
       {
         "name": "OpenSourceRelationalDatabases",
-        "pricingTier": "[parameters('openSourceRelationalDatabasesTier')]"
+        "pricingTier": "[parameters('openSourceRelationalDatabasesTier')]",
+        "subPlan": null
       },
       {
         "name": "Containers",
-        "pricingTier": "[parameters('containersTier')]"
+        "pricingTier": "[parameters('containersTier')]",
+        "subPlan": null
       },
       {
         "name": "CosmosDbs",
-        "pricingTier": "[parameters('cosmosDbsTier')]"
+        "pricingTier": "[parameters('cosmosDbsTier')]",
+        "subPlan": null
       }
     ]
   },
-  "resources": [
-    {
+  "resources": {
+    "avmTelemetry": {
       "condition": "[parameters('enableTelemetry')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2023-07-01",
@@ -292,7 +317,7 @@
         }
       }
     },
-    {
+    "pricingTiers": {
       "copy": {
         "name": "pricingTiers",
         "count": "[length(variables('pricings'))]",
@@ -300,13 +325,14 @@
         "batchSize": 1
       },
       "type": "Microsoft.Security/pricings",
-      "apiVersion": "2018-06-01",
+      "apiVersion": "2024-01-01",
       "name": "[variables('pricings')[copyIndex()].name]",
       "properties": {
-        "pricingTier": "[variables('pricings')[copyIndex()].pricingTier]"
+        "pricingTier": "[variables('pricings')[copyIndex()].pricingTier]",
+        "subPlan": "[variables('pricings')[copyIndex()].subPlan]"
       }
     },
-    {
+    "autoProvisioningSettings": {
       "type": "Microsoft.Security/autoProvisioningSettings",
       "apiVersion": "2017-08-01-preview",
       "name": "default",
@@ -314,7 +340,7 @@
         "autoProvision": "[parameters('autoProvision')]"
       }
     },
-    {
+    "deviceSecurityGroups": {
       "condition": "[not(empty(parameters('deviceSecurityGroupProperties')))]",
       "type": "Microsoft.Security/deviceSecurityGroups",
       "apiVersion": "2019-08-01",
@@ -326,7 +352,7 @@
         "denylistRules": "[parameters('deviceSecurityGroupProperties').denylistRules]"
       }
     },
-    {
+    "securityContacts": {
       "condition": "[not(empty(parameters('securityContactProperties')))]",
       "type": "Microsoft.Security/securityContacts",
       "apiVersion": "2017-08-01-preview",
@@ -338,7 +364,7 @@
         "alertsToAdmins": "[parameters('securityContactProperties').alertsToAdmins]"
       }
     },
-    {
+    "workspaceSettings": {
       "type": "Microsoft.Security/workspaceSettings",
       "apiVersion": "2017-08-01-preview",
       "name": "default",
@@ -347,10 +373,10 @@
         "scope": "[parameters('scope')]"
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Security/autoProvisioningSettings', 'default')]"
+        "autoProvisioningSettings"
       ]
     },
-    {
+    "iotSecuritySolutions": {
       "condition": "[not(empty(parameters('ioTSecuritySolutionProperties')))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
@@ -372,8 +398,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.26.54.24096",
-              "templateHash": "11694037879563074763"
+              "version": "0.27.1.19265",
+              "templateHash": "8389810876824348444"
             }
           },
           "parameters": {
@@ -406,7 +432,7 @@
         }
       }
     }
-  ],
+  },
   "outputs": {
     "workspaceResourceId": {
       "type": "string",
