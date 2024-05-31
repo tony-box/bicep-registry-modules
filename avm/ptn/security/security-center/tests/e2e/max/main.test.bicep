@@ -60,6 +60,7 @@ module testDeployment '../../../main.bicep' = [
       }
       deviceSecurityGroupProperties: {}
       ioTSecuritySolutionProperties: {}
+      virtualMachinesSubPlan: 'P1'
     }
   }
 ]
