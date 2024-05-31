@@ -114,7 +114,7 @@ param containersTier string = 'Free'
 ])
 param cosmosDbsTier string = 'Free'
 
-@description('Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are "P1" & "P2", where for resource level only "P1" sub plan is supported.')
+@description('Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are "P1" & "P2", where for resource level only "P1" sub plan is supported. Only usable if PricingTier = "Standard".')
 @allowed([
   'P1'
   'P2'
@@ -134,12 +134,12 @@ var pricings = [
   {
     name: 'VirtualMachines'
     pricingTier: virtualMachinesPricingTier
-    subPlan: virtualMachinesSubPlan
+    subPlan: (virtualMachinesPricingTier == 'Standard' ? virtualMachinesSubPlan : null)
   }
   {
     name: 'SqlServers'
     pricingTier: sqlServersPricingTier
-    subPlan: 'null'
+    subPlan: null
   }
   {
     name: 'AppServices'

@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.27.1.19265",
-      "templateHash": "18297664756616898149"
+      "templateHash": "3948126460113785490"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -201,7 +201,7 @@
         "P2"
       ],
       "metadata": {
-        "description": "Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are \"P1\" & \"P2\", where for resource level only \"P1\" sub plan is supported."
+        "description": "Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are \"P1\" & \"P2\", where for resource level only \"P1\" sub plan is supported. Only usable if PricingTier = \"Standard\"."
       }
     },
     "securityContactProperties": {
@@ -231,12 +231,12 @@
       {
         "name": "VirtualMachines",
         "pricingTier": "[parameters('virtualMachinesPricingTier')]",
-        "subPlan": "[parameters('virtualMachinesSubPlan')]"
+        "subPlan": "[if(equals(parameters('virtualMachinesPricingTier'), 'Standard'), parameters('virtualMachinesSubPlan'), null())]"
       },
       {
         "name": "SqlServers",
         "pricingTier": "[parameters('sqlServersPricingTier')]",
-        "subPlan": "null"
+        "subPlan": null
       },
       {
         "name": "AppServices",
