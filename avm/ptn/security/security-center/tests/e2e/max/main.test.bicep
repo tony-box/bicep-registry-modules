@@ -53,13 +53,22 @@ module testDeployment '../../../main.bicep' = [
       workspaceResourceId: nestedDependencies.outputs.logAnalyticsWorkspaceResourceId
       location: resourceLocation
       securityContactProperties: {
-        alertNotifications: 'Off'
-        alertsToAdmins: 'Off'
-        email: 'foo@contoso.com'
+        emails: 'foo@contoso.com'
+        isEnabled: false
+        notificationsByRole: {
+          roles: [
+            'Contributor'
+          ]
+          state: 'Off'
+        }
+        notificationsSources: [
+          {
+            sourceType: 'Attack'
+            minimalRiskLevel: 'Critical'
+          }
+        ]
         phone: '+12345678'
       }
-      deviceSecurityGroupProperties: {}
-      ioTSecuritySolutionProperties: {}
     }
   }
 ]

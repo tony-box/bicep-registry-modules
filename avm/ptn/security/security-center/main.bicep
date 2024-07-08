@@ -236,13 +236,14 @@ module iotSecuritySolutions 'modules/iotSecuritySolutions.bicep' = if (!empty(io
   }
 }
 
-resource securityContacts 'Microsoft.Security/securityContacts@2017-08-01-preview' = if (!empty(securityContactProperties)) {
+resource securityContacts 'Microsoft.Security/securityContacts@2023-12-01-preview' = if (!empty(securityContactProperties)) {
   name: 'default'
   properties: {
-    email: securityContactProperties.email
+    emails: securityContactProperties.emails
+    isEnabled: securityContactProperties.isEnabled
+    notificationsByRole: securityContactProperties.notificationsByRole
+    notificationsSources: securityContactProperties.notificationSources
     phone: securityContactProperties.phone
-    alertNotifications: securityContactProperties.alertNotifications
-    alertsToAdmins: securityContactProperties.alertsToAdmins
   }
 }
 
