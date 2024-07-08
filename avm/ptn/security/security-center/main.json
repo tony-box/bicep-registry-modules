@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.28.1.47646",
-      "templateHash": "16141221102197296370"
+      "templateHash": "18399713589663095624"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -49,147 +49,11 @@
         "description": "Optional. Security Solution data."
       }
     },
-    "virtualMachinesPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
+    "pricingsPorperties": {
+      "type": "array",
+      "defaultValue": [],
       "metadata": {
-        "description": "Optional. The pricing tier value for VMs. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "sqlServersPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for SqlServers. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "appServicesPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for AppServices. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "storageAccountsPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for StorageAccounts. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "sqlServerVirtualMachinesPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for SqlServerVirtualMachines. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "kubernetesServicePricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for KubernetesService. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "containerRegistryPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for ContainerRegistry. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "keyVaultsPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for KeyVaults. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "dnsPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for DNS. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "armPricingTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for ARM. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "openSourceRelationalDatabasesTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for OpenSourceRelationalDatabases. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "containersTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for containers. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
-      }
-    },
-    "cosmosDbsTier": {
-      "type": "string",
-      "defaultValue": "Free",
-      "allowedValues": [
-        "Free",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "Optional. The pricing tier value for CosmosDbs. Azure Security Center is provided in two pricing tiers: free and standard, with the standard tier available with a trial period. The standard tier offers advanced security capabilities, while the free tier offers basic security features. - Free or Standard."
+        "description": "Optional. Pricing data."
       }
     },
     "securityContactProperties": {
@@ -214,62 +78,6 @@
       }
     }
   },
-  "variables": {
-    "pricings": [
-      {
-        "name": "VirtualMachines",
-        "pricingTier": "[parameters('virtualMachinesPricingTier')]"
-      },
-      {
-        "name": "SqlServers",
-        "pricingTier": "[parameters('sqlServersPricingTier')]"
-      },
-      {
-        "name": "AppServices",
-        "pricingTier": "[parameters('appServicesPricingTier')]"
-      },
-      {
-        "name": "StorageAccounts",
-        "pricingTier": "[parameters('storageAccountsPricingTier')]"
-      },
-      {
-        "name": "SqlServerVirtualMachines",
-        "pricingTier": "[parameters('sqlServerVirtualMachinesPricingTier')]"
-      },
-      {
-        "name": "KubernetesService",
-        "pricingTier": "[parameters('kubernetesServicePricingTier')]"
-      },
-      {
-        "name": "ContainerRegistry",
-        "pricingTier": "[parameters('containerRegistryPricingTier')]"
-      },
-      {
-        "name": "KeyVaults",
-        "pricingTier": "[parameters('keyVaultsPricingTier')]"
-      },
-      {
-        "name": "Dns",
-        "pricingTier": "[parameters('dnsPricingTier')]"
-      },
-      {
-        "name": "Arm",
-        "pricingTier": "[parameters('armPricingTier')]"
-      },
-      {
-        "name": "OpenSourceRelationalDatabases",
-        "pricingTier": "[parameters('openSourceRelationalDatabasesTier')]"
-      },
-      {
-        "name": "Containers",
-        "pricingTier": "[parameters('containersTier')]"
-      },
-      {
-        "name": "CosmosDbs",
-        "pricingTier": "[parameters('cosmosDbsTier')]"
-      }
-    ]
-  },
   "resources": [
     {
       "condition": "[parameters('enableTelemetry')]",
@@ -290,20 +98,6 @@
             }
           }
         }
-      }
-    },
-    {
-      "copy": {
-        "name": "pricingTiers",
-        "count": "[length(variables('pricings'))]",
-        "mode": "serial",
-        "batchSize": 1
-      },
-      "type": "Microsoft.Security/pricings",
-      "apiVersion": "2018-06-01",
-      "name": "[variables('pricings')[copyIndex()].name]",
-      "properties": {
-        "pricingTier": "[variables('pricings')[copyIndex()].pricingTier]"
       }
     },
     {
@@ -329,13 +123,14 @@
     {
       "condition": "[not(empty(parameters('securityContactProperties')))]",
       "type": "Microsoft.Security/securityContacts",
-      "apiVersion": "2017-08-01-preview",
+      "apiVersion": "2023-12-01-preview",
       "name": "default",
       "properties": {
-        "email": "[parameters('securityContactProperties').email]",
-        "phone": "[parameters('securityContactProperties').phone]",
-        "alertNotifications": "[parameters('securityContactProperties').alertNotifications]",
-        "alertsToAdmins": "[parameters('securityContactProperties').alertsToAdmins]"
+        "emails": "[parameters('securityContactProperties').emails]",
+        "isEnabled": "[parameters('securityContactProperties').isEnabled]",
+        "notificationsByRole": "[parameters('securityContactProperties').notificationsByRole]",
+        "notificationsSources": "[parameters('securityContactProperties').notificationSources]",
+        "phone": "[parameters('securityContactProperties').phone]"
       }
     },
     {
@@ -348,6 +143,136 @@
       },
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Security/autoProvisioningSettings', 'default')]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "pricing",
+        "count": "[length(parameters('pricingsPorperties'))]",
+        "mode": "serial",
+        "batchSize": 1
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-pricing', parameters('pricingsPorperties')[copyIndex()].name)]",
+      "resourceGroup": "[subscriptionResourceId('Microsoft.Security/workspaceSettings', 'default')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[parameters('pricingsPorperties')[copyIndex()].name]"
+          },
+          "enforce": {
+            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'enforce')]"
+          },
+          "extensions": {
+            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'extensions')]"
+          },
+          "pricingTier": {
+            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'pricingTier')]"
+          },
+          "subPlan": {
+            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'subPlan')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "languageVersion": "2.0",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "8202101056565986591"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "Required.\tThe pricing name. Use \"az security pricing list\" to find the latest list of pricing names."
+              }
+            },
+            "pricingTier": {
+              "type": "string",
+              "defaultValue": "Free",
+              "allowedValues": [
+                "Standard",
+                "Free"
+              ],
+              "metadata": {
+                "description": "Optional. List of extensions offered under a plan."
+              }
+            },
+            "enforce": {
+              "type": "string",
+              "nullable": true,
+              "allowedValues": [
+                "True",
+                "False"
+              ],
+              "metadata": {
+                "description": "Optional. If set to \"False\", it allows the descendants of this scope to override the pricing configuration set on this scope (allows setting inherited=\"False\"). If set to \"True\", it prevents overrides and forces this pricing configuration on all the descendants of this scope. This field is only available for subscription-level pricing."
+              }
+            },
+            "extensions": {
+              "type": "array",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. List of extensions offered under a plan."
+              }
+            },
+            "subPlan": {
+              "type": "string",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are \"P1\" & \"P2\", where for resource level only \"P1\" sub plan is supported."
+              }
+            }
+          },
+          "resources": {
+            "pricing_values": {
+              "type": "Microsoft.Security/pricings",
+              "apiVersion": "2024-01-01",
+              "name": "[parameters('name')]",
+              "properties": {
+                "enforce": "[parameters('enforce')]",
+                "extensions": "[parameters('extensions')]",
+                "pricingTier": "[parameters('pricingTier')]",
+                "subPlan": "[parameters('subPlan')]"
+              }
+            }
+          },
+          "outputs": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the deployed Pricing."
+              },
+              "value": "[parameters('name')]"
+            },
+            "resourceId": {
+              "type": "string",
+              "metadata": {
+                "description": "The resource ID of the deployed Pricing."
+              },
+              "value": "[resourceId('Microsoft.Security/pricings', parameters('name'))]"
+            },
+            "resourceGroupName": {
+              "type": "string",
+              "metadata": {
+                "description": "The resource group the Pricing was deployed to."
+              },
+              "value": "[resourceGroup().name]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Security/workspaceSettings', 'default')]"
       ]
     },
     {

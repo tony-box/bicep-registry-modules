@@ -69,6 +69,22 @@ module testDeployment '../../../main.bicep' = [
         ]
         phone: '+12345678'
       }
+      pricingsPorperties: [
+        {
+          virtualMachines: {
+            name: 'VirtualMachines'
+            properties: {
+              enforce: false
+              extensions: []
+              pricingTier: 'Standard'
+              subPlan: 'P1'
+            }
+          }
+          KeyVaults: {
+            name: 'KeyVaults'
+          }
+        }
+      ]
     }
   }
 ]
