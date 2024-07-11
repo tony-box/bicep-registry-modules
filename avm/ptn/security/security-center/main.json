@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.28.1.47646",
-      "templateHash": "16364210269811627179"
+      "templateHash": "10888532138743796729"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -228,13 +228,13 @@
             "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'enforce')]"
           },
           "extensions": {
-            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()].properties, 'extensions')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'extensions')]"
           },
           "pricingTier": {
-            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()].properties, 'pricingTier')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'pricingTier')]"
           },
           "subPlan": {
-            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()].properties, 'subPlan')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'subPlan')]"
           }
         },
         "template": {
