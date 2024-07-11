@@ -1,4 +1,4 @@
-@description('Required.	The pricing name. Use "az security pricing list" to find the latest list of pricing names.')
+@description('Required. The pricing name. Use "az security pricing list" to find the latest list of pricing names.')
 param name string
 
 @description('Optional. List of extensions offered under a plan.')
