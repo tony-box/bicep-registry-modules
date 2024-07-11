@@ -66,9 +66,9 @@ module pricing 'modules/pricings.bicep' = [
     params: {
       name: pricing.name
       enforce: pricing.?enforce
-      extensions: pricing.properties.?extensions
-      pricingTier: pricing.properties.?pricingTier
-      subPlan: pricing.properties.?subPlan
+      extensions: pricing.?extensions
+      pricingTier: pricing.?pricingTier
+      subPlan: pricing.?subPlan
     }
   }
 ]

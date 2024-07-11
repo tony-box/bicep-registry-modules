@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.28.1.47646",
-      "templateHash": "5728865783676153764"
+      "templateHash": "16364210269811627179"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -245,14 +245,14 @@
             "_generator": {
               "name": "bicep",
               "version": "0.28.1.47646",
-              "templateHash": "8202101056565986591"
+              "templateHash": "10104491708876597792"
             }
           },
           "parameters": {
             "name": {
               "type": "string",
               "metadata": {
-                "description": "Required.\tThe pricing name. Use \"az security pricing list\" to find the latest list of pricing names."
+                "description": "Required. The pricing name. Use \"az security pricing list\" to find the latest list of pricing names."
               }
             },
             "pricingTier": {
