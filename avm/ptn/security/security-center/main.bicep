@@ -8,7 +8,7 @@ targetScope = 'subscription'
 param workspaceResourceId string
 
 @description('Required. All the VMs in this scope will send their security data to the mentioned workspace unless overridden by a setting with more specific scope.')
-param scope string
+param workspaceScope string
 
 @description('Optional. Describes what kind of security agent provisioning action to take. - On or Off.')
 @allowed([
@@ -24,7 +24,7 @@ param deviceSecurityGroupProperties object = {}
 param ioTSecuritySolutionProperties object = {}
 
 @description('Optional. Pricing data.')
-param pricingsPorperties array = []
+param pricings pricingsType
 
 @description('Optional. Security contact data.')
 param securityContactProperties object = {}
@@ -60,12 +60,12 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableT
 
 @batchSize(1)
 module pricing 'modules/pricings.bicep' = [
-  for (pricing, index) in pricingsPorperties: {
-    name: '${pricing.name}-pricing'
-    scope: resourceGroup(workspaceSettings.id)
+  for (pricing, index) in (pricings ?? []): {
+    name: '${pricing.name}-${index}'
+    scope: resourceGroup(split((pricing.resourceGroupId ?? '//'), '/')[2])
     params: {
       name: pricing.name
-      enforce: pricing.properties.?enforce
+      enforce: pricing.?enforce
       extensions: pricing.properties.?extensions
       pricingTier: pricing.properties.?pricingTier
       subPlan: pricing.properties.?subPlan
@@ -113,7 +113,7 @@ resource workspaceSettings 'Microsoft.Security/workspaceSettings@2017-08-01-prev
   name: 'default'
   properties: {
     workspaceId: workspaceResourceId
-    scope: scope
+    scope: workspaceScope
   }
   dependsOn: [
     autoProvisioningSettings
@@ -125,3 +125,27 @@ output workspaceResourceId string = workspaceResourceId
 
 @description('The name of the security center.')
 output name string = 'Security'
+
+// =============== //
+//   Definitions   //
+// =============== //
+
+type pricingsType = {
+  @description('Required.	The pricing name. Use "az security pricing list" to find the latest list of pricing names.')
+  name: string
+
+  @description('Required.	The target resourceGroupId for the pricings deployment.')
+  resourceGroupId: string
+
+  @description('Optional. List of extensions offered under a plan.')
+  pricingTier: ('Standard' | 'Free')?
+
+  @description('Optional. If set to "False", it allows the descendants of this scope to override the pricing configuration set on this scope (allows setting inherited="False"). If set to "True", it prevents overrides and forces this pricing configuration on all the descendants of this scope. This field is only available for subscription-level pricing.')
+  enforce: ('True' | 'False')?
+
+  @description('Optional. List of extensions offered under a plan.')
+  extensions: array?
+
+  @description('Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are "P1" & "P2", where for resource level only "P1" sub plan is supported.')
+  subPlan: string?
+}[]?

@@ -1,15 +1,75 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "languageVersion": "2.0",
   "contentVersion": "1.0.0.0",
   "metadata": {
     "_generator": {
       "name": "bicep",
       "version": "0.28.1.47646",
-      "templateHash": "18399713589663095624"
+      "templateHash": "5728865783676153764"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
     "owner": "Azure/module-maintainers"
+  },
+  "definitions": {
+    "pricingsType": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "metadata": {
+              "description": "Required.\tThe pricing name. Use \"az security pricing list\" to find the latest list of pricing names."
+            }
+          },
+          "resourceGroupId": {
+            "type": "string",
+            "metadata": {
+              "description": "Required.\tThe target resourceGroupId for the pricings deployment."
+            }
+          },
+          "pricingTier": {
+            "type": "string",
+            "allowedValues": [
+              "Free",
+              "Standard"
+            ],
+            "nullable": true,
+            "metadata": {
+              "description": "Optional. List of extensions offered under a plan."
+            }
+          },
+          "enforce": {
+            "type": "string",
+            "allowedValues": [
+              "False",
+              "True"
+            ],
+            "nullable": true,
+            "metadata": {
+              "description": "Optional. If set to \"False\", it allows the descendants of this scope to override the pricing configuration set on this scope (allows setting inherited=\"False\"). If set to \"True\", it prevents overrides and forces this pricing configuration on all the descendants of this scope. This field is only available for subscription-level pricing."
+            }
+          },
+          "extensions": {
+            "type": "array",
+            "nullable": true,
+            "metadata": {
+              "description": "Optional. List of extensions offered under a plan."
+            }
+          },
+          "subPlan": {
+            "type": "string",
+            "nullable": true,
+            "metadata": {
+              "description": "Optional. The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are \"P1\" & \"P2\", where for resource level only \"P1\" sub plan is supported."
+            }
+          }
+        }
+      },
+      "nullable": true
+    }
   },
   "parameters": {
     "workspaceResourceId": {
@@ -18,7 +78,7 @@
         "description": "Required. The full resource Id of the Log Analytics workspace to save the data in."
       }
     },
-    "scope": {
+    "workspaceScope": {
       "type": "string",
       "metadata": {
         "description": "Required. All the VMs in this scope will send their security data to the mentioned workspace unless overridden by a setting with more specific scope."
@@ -49,9 +109,8 @@
         "description": "Optional. Security Solution data."
       }
     },
-    "pricingsPorperties": {
-      "type": "array",
-      "defaultValue": [],
+    "pricings": {
+      "$ref": "#/definitions/pricingsType",
       "metadata": {
         "description": "Optional. Pricing data."
       }
@@ -78,8 +137,8 @@
       }
     }
   },
-  "resources": [
-    {
+  "resources": {
+    "avmTelemetry": {
       "condition": "[parameters('enableTelemetry')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2024-03-01",
@@ -100,7 +159,7 @@
         }
       }
     },
-    {
+    "autoProvisioningSettings": {
       "type": "Microsoft.Security/autoProvisioningSettings",
       "apiVersion": "2017-08-01-preview",
       "name": "default",
@@ -108,7 +167,7 @@
         "autoProvision": "[parameters('autoProvision')]"
       }
     },
-    {
+    "deviceSecurityGroups": {
       "condition": "[not(empty(parameters('deviceSecurityGroupProperties')))]",
       "type": "Microsoft.Security/deviceSecurityGroups",
       "apiVersion": "2019-08-01",
@@ -120,7 +179,7 @@
         "denylistRules": "[parameters('deviceSecurityGroupProperties').denylistRules]"
       }
     },
-    {
+    "securityContacts": {
       "condition": "[not(empty(parameters('securityContactProperties')))]",
       "type": "Microsoft.Security/securityContacts",
       "apiVersion": "2023-12-01-preview",
@@ -133,29 +192,29 @@
         "phone": "[parameters('securityContactProperties').phone]"
       }
     },
-    {
+    "workspaceSettings": {
       "type": "Microsoft.Security/workspaceSettings",
       "apiVersion": "2017-08-01-preview",
       "name": "default",
       "properties": {
         "workspaceId": "[parameters('workspaceResourceId')]",
-        "scope": "[parameters('scope')]"
+        "scope": "[parameters('workspaceScope')]"
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Security/autoProvisioningSettings', 'default')]"
+        "autoProvisioningSettings"
       ]
     },
-    {
+    "pricing": {
       "copy": {
         "name": "pricing",
-        "count": "[length(parameters('pricingsPorperties'))]",
+        "count": "[length(coalesce(parameters('pricings'), createArray()))]",
         "mode": "serial",
         "batchSize": 1
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}-pricing', parameters('pricingsPorperties')[copyIndex()].name)]",
-      "resourceGroup": "[subscriptionResourceId('Microsoft.Security/workspaceSettings', 'default')]",
+      "name": "[format('{0}-{1}', coalesce(parameters('pricings'), createArray())[copyIndex()].name, copyIndex())]",
+      "resourceGroup": "[split(coalesce(coalesce(parameters('pricings'), createArray())[copyIndex()].resourceGroupId, '//'), '/')[2]]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -163,19 +222,19 @@
         "mode": "Incremental",
         "parameters": {
           "name": {
-            "value": "[parameters('pricingsPorperties')[copyIndex()].name]"
+            "value": "[coalesce(parameters('pricings'), createArray())[copyIndex()].name]"
           },
           "enforce": {
-            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'enforce')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'enforce')]"
           },
           "extensions": {
-            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'extensions')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()].properties, 'extensions')]"
           },
           "pricingTier": {
-            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'pricingTier')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()].properties, 'pricingTier')]"
           },
           "subPlan": {
-            "value": "[tryGet(parameters('pricingsPorperties')[copyIndex()].properties, 'subPlan')]"
+            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()].properties, 'subPlan')]"
           }
         },
         "template": {
@@ -270,12 +329,9 @@
             }
           }
         }
-      },
-      "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Security/workspaceSettings', 'default')]"
-      ]
+      }
     },
-    {
+    "iotSecuritySolutions": {
       "condition": "[not(empty(parameters('ioTSecuritySolutionProperties')))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
@@ -331,7 +387,7 @@
         }
       }
     }
-  ],
+  },
   "outputs": {
     "workspaceResourceId": {
       "type": "string",

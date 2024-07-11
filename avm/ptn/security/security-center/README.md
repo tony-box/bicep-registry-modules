@@ -48,8 +48,8 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
   name: 'securityCenterDeployment'
   params: {
     // Required parameters
-    scope: '<scope>'
     workspaceResourceId: '<workspaceResourceId>'
+    workspaceScope: '<workspaceScope>'
     // Non-required parameters
     location: '<location>'
   }
@@ -69,11 +69,11 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
   "contentVersion": "1.0.0.0",
   "parameters": {
     // Required parameters
-    "scope": {
-      "value": "<scope>"
-    },
     "workspaceResourceId": {
       "value": "<workspaceResourceId>"
+    },
+    "workspaceScope": {
+      "value": "<workspaceScope>"
     },
     // Non-required parameters
     "location": {
@@ -100,24 +100,22 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
   name: 'securityCenterDeployment'
   params: {
     // Required parameters
-    scope: '<scope>'
     workspaceResourceId: '<workspaceResourceId>'
+    workspaceScope: '<workspaceScope>'
     // Non-required parameters
     location: '<location>'
-    pricingsPorperties: [
+    pricings: [
       {
-        KeyVaults: {
-          name: 'KeyVaults'
-        }
-        virtualMachines: {
-          name: 'VirtualMachines'
-          properties: {
-            enforce: false
-            extensions: []
-            pricingTier: 'Standard'
-            subPlan: 'P1'
-          }
-        }
+        enforce: 'False'
+        extensions: []
+        name: 'VirtualMachines'
+        pricingTier: 'Standard'
+        resourceGroupId: '<resourceGroupId>'
+        subPlan: 'P1'
+      }
+      {
+        name: 'KeyVaults'
+        resourceGroupId: '<resourceGroupId>'
       }
     ]
     securityContactProperties: {
@@ -129,10 +127,10 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
         ]
         state: 'Off'
       }
-      notificationsSources: [
+      notificationSources: [
         {
           minimalRiskLevel: 'Critical'
-          sourceType: 'Attack'
+          sourceType: 'AttackPath'
         }
       ]
       phone: '+12345678'
@@ -154,31 +152,29 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
   "contentVersion": "1.0.0.0",
   "parameters": {
     // Required parameters
-    "scope": {
-      "value": "<scope>"
-    },
     "workspaceResourceId": {
       "value": "<workspaceResourceId>"
+    },
+    "workspaceScope": {
+      "value": "<workspaceScope>"
     },
     // Non-required parameters
     "location": {
       "value": "<location>"
     },
-    "pricingsPorperties": {
+    "pricings": {
       "value": [
         {
-          "KeyVaults": {
-            "name": "KeyVaults"
-          },
-          "virtualMachines": {
-            "name": "VirtualMachines",
-            "properties": {
-              "enforce": false,
-              "extensions": [],
-              "pricingTier": "Standard",
-              "subPlan": "P1"
-            }
-          }
+          "enforce": "False",
+          "extensions": [],
+          "name": "VirtualMachines",
+          "pricingTier": "Standard",
+          "resourceGroupId": "<resourceGroupId>",
+          "subPlan": "P1"
+        },
+        {
+          "name": "KeyVaults",
+          "resourceGroupId": "<resourceGroupId>"
         }
       ]
     },
@@ -192,10 +188,10 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
           ],
           "state": "Off"
         },
-        "notificationsSources": [
+        "notificationSources": [
           {
             "minimalRiskLevel": "Critical",
-            "sourceType": "Attack"
+            "sourceType": "AttackPath"
           }
         ],
         "phone": "+12345678"
@@ -222,8 +218,8 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
   name: 'securityCenterDeployment'
   params: {
     // Required parameters
-    scope: '<scope>'
     workspaceResourceId: '<workspaceResourceId>'
+    workspaceScope: '<workspaceScope>'
     // Non-required parameters
     location: '<location>'
   }
@@ -243,11 +239,11 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
   "contentVersion": "1.0.0.0",
   "parameters": {
     // Required parameters
-    "scope": {
-      "value": "<scope>"
-    },
     "workspaceResourceId": {
       "value": "<workspaceResourceId>"
+    },
+    "workspaceScope": {
+      "value": "<workspaceScope>"
     },
     // Non-required parameters
     "location": {
@@ -267,8 +263,8 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`scope`](#parameter-scope) | string | All the VMs in this scope will send their security data to the mentioned workspace unless overridden by a setting with more specific scope. |
 | [`workspaceResourceId`](#parameter-workspaceresourceid) | string | The full resource Id of the Log Analytics workspace to save the data in. |
+| [`workspaceScope`](#parameter-workspacescope) | string | All the VMs in this scope will send their security data to the mentioned workspace unless overridden by a setting with more specific scope. |
 
 **Optional parameters**
 
@@ -279,19 +275,19 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
 | [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
 | [`ioTSecuritySolutionProperties`](#parameter-iotsecuritysolutionproperties) | object | Security Solution data. |
 | [`location`](#parameter-location) | string | Location deployment metadata. |
-| [`pricingsPorperties`](#parameter-pricingsporperties) | array | Pricing data. |
+| [`pricings`](#parameter-pricings) | array | Pricing data. |
 | [`securityContactProperties`](#parameter-securitycontactproperties) | object | Security contact data. |
-
-### Parameter: `scope`
-
-All the VMs in this scope will send their security data to the mentioned workspace unless overridden by a setting with more specific scope.
-
-- Required: Yes
-- Type: string
 
 ### Parameter: `workspaceResourceId`
 
 The full resource Id of the Log Analytics workspace to save the data in.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `workspaceScope`
+
+All the VMs in this scope will send their security data to the mentioned workspace unless overridden by a setting with more specific scope.
 
 - Required: Yes
 - Type: string
@@ -343,13 +339,68 @@ Location deployment metadata.
 - Type: string
 - Default: `[deployment().location]`
 
-### Parameter: `pricingsPorperties`
+### Parameter: `pricings`
 
 Pricing data.
 
 - Required: No
 - Type: array
-- Default: `[]`
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`enforce`](#parameter-pricingsenforce) | string | If set to "False", it allows the descendants of this scope to override the pricing configuration set on this scope (allows setting inherited="False"). If set to "True", it prevents overrides and forces this pricing configuration on all the descendants of this scope. This field is only available for subscription-level pricing. |
+| [`extensions`](#parameter-pricingsextensions) | array | List of extensions offered under a plan. |
+| [`pricingTier`](#parameter-pricingspricingtier) | string | List of extensions offered under a plan. |
+| [`subPlan`](#parameter-pricingssubplan) | string | The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are "P1" & "P2", where for resource level only "P1" sub plan is supported. |
+
+### Parameter: `pricings.enforce`
+
+If set to "False", it allows the descendants of this scope to override the pricing configuration set on this scope (allows setting inherited="False"). If set to "True", it prevents overrides and forces this pricing configuration on all the descendants of this scope. This field is only available for subscription-level pricing.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'False'
+    'True'
+  ]
+  ```
+
+### Parameter: `pricings.extensions`
+
+List of extensions offered under a plan.
+
+- Required: No
+- Type: array
+
+### Parameter: `pricings.pricingTier`
+
+List of extensions offered under a plan.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'Free'
+    'Standard'
+  ]
+  ```
+
+### Parameter: `pricings.subPlan`
+
+The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are "P1" & "P2", where for resource level only "P1" sub plan is supported.
+
+- Required: No
+- Type: string
 
 ### Parameter: `securityContactProperties`
 

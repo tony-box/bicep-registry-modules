@@ -49,7 +49,7 @@ module testDeployment '../../../main.bicep' = [
   for iteration in ['init', 'idem']: {
     name: '${uniqueString(deployment().name, resourceLocation)}-test-${serviceShort}-${iteration}'
     params: {
-      scope: subscription().id
+      workspaceScope: subscription().id
       workspaceResourceId: nestedDependencies.outputs.logAnalyticsWorkspaceResourceId
       location: resourceLocation
       securityContactProperties: {
@@ -61,28 +61,26 @@ module testDeployment '../../../main.bicep' = [
           ]
           state: 'Off'
         }
-        notificationsSources: [
+        notificationSources: [
           {
-            sourceType: 'Attack'
+            sourceType: 'AttackPath'
             minimalRiskLevel: 'Critical'
           }
         ]
         phone: '+12345678'
       }
-      pricingsPorperties: [
+      pricings: [
         {
-          virtualMachines: {
-            name: 'VirtualMachines'
-            properties: {
-              enforce: false
-              extensions: []
-              pricingTier: 'Standard'
-              subPlan: 'P1'
-            }
-          }
-          KeyVaults: {
-            name: 'KeyVaults'
-          }
+          name: 'VirtualMachines'
+          resourceGroupId: resourceGroup.id
+          enforce: 'False'
+          extensions: []
+          pricingTier: 'Standard'
+          subPlan: 'P1'
+        }
+        {
+          name: 'KeyVaults'
+          resourceGroupId: resourceGroup.id
         }
       ]
     }
