@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.28.1.47646",
-      "templateHash": "10888532138743796729"
+      "templateHash": "2698779980626410892"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -21,13 +21,7 @@
           "name": {
             "type": "string",
             "metadata": {
-              "description": "Required.\tThe pricing name. Use \"az security pricing list\" to find the latest list of pricing names."
-            }
-          },
-          "resourceGroupId": {
-            "type": "string",
-            "metadata": {
-              "description": "Required.\tThe target resourceGroupId for the pricings deployment."
+              "description": "Required. The pricing name. Use \"az security pricing list\" to find the latest list of pricing names."
             }
           },
           "pricingTier": {
@@ -214,7 +208,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('{0}-{1}', coalesce(parameters('pricings'), createArray())[copyIndex()].name, copyIndex())]",
-      "resourceGroup": "[split(coalesce(coalesce(parameters('pricings'), createArray())[copyIndex()].resourceGroupId, '//'), '/')[2]]",
+      "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -223,9 +217,6 @@
         "parameters": {
           "name": {
             "value": "[coalesce(parameters('pricings'), createArray())[copyIndex()].name]"
-          },
-          "enforce": {
-            "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'enforce')]"
           },
           "extensions": {
             "value": "[tryGet(coalesce(parameters('pricings'), createArray())[copyIndex()], 'extensions')]"
@@ -238,14 +229,14 @@
           }
         },
         "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
           "languageVersion": "2.0",
           "contentVersion": "1.0.0.0",
           "metadata": {
             "_generator": {
               "name": "bicep",
               "version": "0.28.1.47646",
-              "templateHash": "10104491708876597792"
+              "templateHash": "18046318056173069445"
             }
           },
           "parameters": {
@@ -266,17 +257,6 @@
                 "description": "Optional. List of extensions offered under a plan."
               }
             },
-            "enforce": {
-              "type": "string",
-              "nullable": true,
-              "allowedValues": [
-                "True",
-                "False"
-              ],
-              "metadata": {
-                "description": "Optional. If set to \"False\", it allows the descendants of this scope to override the pricing configuration set on this scope (allows setting inherited=\"False\"). If set to \"True\", it prevents overrides and forces this pricing configuration on all the descendants of this scope. This field is only available for subscription-level pricing."
-              }
-            },
             "extensions": {
               "type": "array",
               "nullable": true,
@@ -295,10 +275,9 @@
           "resources": {
             "pricing_values": {
               "type": "Microsoft.Security/pricings",
-              "apiVersion": "2024-01-01",
+              "apiVersion": "2023-01-01",
               "name": "[parameters('name')]",
               "properties": {
-                "enforce": "[parameters('enforce')]",
                 "extensions": "[parameters('extensions')]",
                 "pricingTier": "[parameters('pricingTier')]",
                 "subPlan": "[parameters('subPlan')]"
@@ -318,14 +297,7 @@
               "metadata": {
                 "description": "The resource ID of the deployed Pricing."
               },
-              "value": "[resourceId('Microsoft.Security/pricings', parameters('name'))]"
-            },
-            "resourceGroupName": {
-              "type": "string",
-              "metadata": {
-                "description": "The resource group the Pricing was deployed to."
-              },
-              "value": "[resourceGroup().name]"
+              "value": "[subscriptionResourceId('Microsoft.Security/pricings', parameters('name'))]"
             }
           }
         }

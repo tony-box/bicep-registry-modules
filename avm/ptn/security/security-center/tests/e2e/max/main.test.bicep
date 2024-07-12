@@ -72,7 +72,6 @@ module testDeployment '../../../main.bicep' = [
       pricings: [
         {
           name: 'VirtualMachines'
-          resourceGroupId: resourceGroup.id
           enforce: 'False'
           extensions: []
           pricingTier: 'Standard'
@@ -80,7 +79,6 @@ module testDeployment '../../../main.bicep' = [
         }
         {
           name: 'KeyVaults'
-          resourceGroupId: resourceGroup.id
         }
       ]
     }

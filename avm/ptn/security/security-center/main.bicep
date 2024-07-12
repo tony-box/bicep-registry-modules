@@ -62,10 +62,9 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableT
 module pricing 'modules/pricings.bicep' = [
   for (pricing, index) in (pricings ?? []): {
     name: '${pricing.name}-${index}'
-    scope: resourceGroup(split((pricing.resourceGroupId ?? '//'), '/')[2])
     params: {
       name: pricing.name
-      enforce: pricing.?enforce
+      // enforce: pricing.?enforce
       extensions: pricing.?extensions
       pricingTier: pricing.?pricingTier
       subPlan: pricing.?subPlan
@@ -131,11 +130,8 @@ output name string = 'Security'
 // =============== //
 
 type pricingsType = {
-  @description('Required.	The pricing name. Use "az security pricing list" to find the latest list of pricing names.')
+  @description('Required. The pricing name. Use "az security pricing list" to find the latest list of pricing names.')
   name: string
-
-  @description('Required.	The target resourceGroupId for the pricings deployment.')
-  resourceGroupId: string
 
   @description('Optional. List of extensions offered under a plan.')
   pricingTier: ('Standard' | 'Free')?

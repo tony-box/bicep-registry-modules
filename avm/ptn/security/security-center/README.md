@@ -18,7 +18,7 @@ This module deploys an Azure Security Center (Defender for Cloud) Configuration.
 | `Microsoft.Security/autoProvisioningSettings` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/autoProvisioningSettings) |
 | `Microsoft.Security/deviceSecurityGroups` | [2019-08-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2019-08-01/deviceSecurityGroups) |
 | `Microsoft.Security/iotSecuritySolutions` | [2019-08-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2019-08-01/iotSecuritySolutions) |
-| `Microsoft.Security/pricings` | [2024-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2024-01-01/pricings) |
+| `Microsoft.Security/pricings` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2023-01-01/pricings) |
 | `Microsoft.Security/securityContacts` | [2023-12-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2023-12-01-preview/securityContacts) |
 | `Microsoft.Security/workspaceSettings` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/workspaceSettings) |
 
@@ -110,12 +110,10 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
         extensions: []
         name: 'VirtualMachines'
         pricingTier: 'Standard'
-        resourceGroupId: '<resourceGroupId>'
         subPlan: 'P1'
       }
       {
         name: 'KeyVaults'
-        resourceGroupId: '<resourceGroupId>'
       }
     ]
     securityContactProperties: {
@@ -169,12 +167,10 @@ module securityCenter 'br/public:avm/ptn/security/security-center:<version>' = {
           "extensions": [],
           "name": "VirtualMachines",
           "pricingTier": "Standard",
-          "resourceGroupId": "<resourceGroupId>",
           "subPlan": "P1"
         },
         {
-          "name": "KeyVaults",
-          "resourceGroupId": "<resourceGroupId>"
+          "name": "KeyVaults"
         }
       ]
     },
@@ -350,6 +346,7 @@ Pricing data.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
+| [`name`](#parameter-pricingsname) | string | The pricing name. Use "az security pricing list" to find the latest list of pricing names. |
 
 **Optional parameters**
 
@@ -359,6 +356,13 @@ Pricing data.
 | [`extensions`](#parameter-pricingsextensions) | array | List of extensions offered under a plan. |
 | [`pricingTier`](#parameter-pricingspricingtier) | string | List of extensions offered under a plan. |
 | [`subPlan`](#parameter-pricingssubplan) | string | The sub-plan selected for a Standard pricing configuration, when more than one sub-plan is available. Each sub-plan enables a set of security features. When not specified, full plan is applied. For VirtualMachines plan, available sub plans are "P1" & "P2", where for resource level only "P1" sub plan is supported. |
+
+### Parameter: `pricings.name`
+
+The pricing name. Use "az security pricing list" to find the latest list of pricing names.
+
+- Required: Yes
+- Type: string
 
 ### Parameter: `pricings.enforce`
 
