@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.28.1.47646",
-      "templateHash": "2698779980626410892"
+      "templateHash": "11404777753522968837"
     },
     "name": "Azure Security Center (Defender for Cloud)",
     "description": "This module deploys an Azure Security Center (Defender for Cloud) Configuration.",
@@ -207,7 +207,7 @@
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}-{1}', coalesce(parameters('pricings'), createArray())[copyIndex()].name, copyIndex())]",
+      "name": "[format('{0}-{1}-{2}', uniqueString(deployment().name), coalesce(parameters('pricings'), createArray())[copyIndex()].name, copyIndex())]",
       "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
