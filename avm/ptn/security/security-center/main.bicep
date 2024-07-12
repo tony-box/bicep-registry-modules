@@ -61,7 +61,7 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableT
 @batchSize(1)
 module pricing 'modules/pricings.bicep' = [
   for (pricing, index) in (pricings ?? []): {
-    name: '${pricing.name}-${index}'
+    name: '${uniqueString(deployment().name)}-${pricing.name}-${index}'
     params: {
       name: pricing.name
       // enforce: pricing.?enforce
