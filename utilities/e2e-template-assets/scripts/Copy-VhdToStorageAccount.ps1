@@ -89,6 +89,7 @@ process {
     Write-Verbose 'Initializing source storage account parameters before the blob copy' -Verbose
     Write-Verbose ('Retrieving source storage account from Image Template [{0}] in resource group [{1}]' -f $imageTemplateName, $imageTemplateResourceGroup) -Verbose
     Get-InstalledModule
+    $imgtRunOutput = Get-AzImageBuilderTemplateRunOutput -ImageTemplateName 'dep-tbox-imgt-cimax-2025-03-12-21-22-47' -ResourceGroupName 'dep-tbox-compute.images-cimax-rg' | Where-Object ArtifactUri -NE $null
     $imgtRunOutput = Get-AzImageBuilderTemplateRunOutput -ImageTemplateName $imageTemplateName -ResourceGroupName $imageTemplateResourceGroup | Where-Object ArtifactUri -NE $null
     $sourceUri = $imgtRunOutput.ArtifactUri
     $sourceStorageAccountName = $sourceUri.Split('//')[1].Split('.')[0]
