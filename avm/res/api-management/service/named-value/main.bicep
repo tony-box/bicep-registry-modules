@@ -7,8 +7,14 @@ param apiManagementServiceName string
 @description('Required. Unique name of NamedValue. It may contain only letters, digits, period, dash, and underscore characters.')
 param displayName string
 
+@description('KeyVault contract for API Management Named Value.')
+type KeyVaultContract = {
+  secretIdentifier: string
+  identityClientId: string
+}
+
 @description('Optional. KeyVault location details of the namedValue.')
-param keyVault object = {}
+param keyVault KeyVaultContract?
 
 @description('Required. Named value Name.')
 param name string
