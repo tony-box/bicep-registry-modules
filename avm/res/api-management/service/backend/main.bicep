@@ -88,16 +88,7 @@ output resourceGroupName string = resourceGroup().name
 @sys.description('Backend Credentials Contract Properties.')
 type BackendCredentials = {
   @sys.description('Optional. Authorization header authentication.')
-  authorization: {
-    @sys.description('Required. Authentication Parameter value.')
-    @minLength(1)
-    @maxLength(300)
-    parameter: string
-    @sys.description('Required. Authentication Scheme name.')
-    @minLength(1)
-    @maxLength(300)
-    scheme: string
-  }
+  authorization: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.credentials.authorization?
   @sys.description('Optional. List of Client Certificate Thumbprints. Will be ignored if certificatesIds are provided.')
   certificate: string[]
   @sys.description('Optional. List of Client Certificate Ids.')
@@ -142,12 +133,7 @@ type BackendServiceFabricCluster = {
   @sys.description('Optional. Thumbprints of certificates cluster management service uses for tls communication')
   serverCertificateThumbprints: string[]
   @sys.description('Optional. Server X509 Certificate Names Collection.')
-  serverX509Names: {
-    @sys.description('Optional. Thumbprint for the Issuer of the Certificate.')
-    issuerCertificateThumbprint: string
-    @sys.description('Optional. Common Name of the Certificate.')
-    name: string
-  }[]
+  serverX509Names: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.properties.serviceFabricCluster.serverX509Names?
 }
 
 @sys.description('Backend TLS Properties.')
@@ -161,58 +147,11 @@ type BackendTls = {
 @sys.description('Backend Circuit Breaker Contract Properties.')
 type BackendCircuitBreaker = {
   @sys.description('Optional. The rules for tripping the backend.')
-  rules: [
-    {
-      @sys.description('Optional. flag to accept Retry-After header from the backend.')
-      acceptRetryAfter: bool
-      @sys.description('Optional. The conditions for tripping the circuit breaker.')
-      failureCondition: {
-        @sys.description('Optional. The threshold for opening the circuit.')
-        count: int
-        @sys.description('Optional. The error reasons which are considered as failure.')
-        @sys.maxLength(200)
-        errorReasons: ['string']
-        @sys.description('Optional. The interval during which the failures are counted.')
-        interval: 'string'
-        @sys.description('Optional. The threshold for opening the circuit.')
-        percentage: int
-        @sys.description('Optional. The status code ranges which are considered as failure.')
-        statusCodeRanges: [
-          {
-            @sys.description('Required. The maximum http status code.')
-            @minValue(200)
-            @maxValue(599)
-            max: int
-            @sys.description('Required. The minimum http status code.')
-            @minValue(200)
-            @maxValue(599)
-            min: int
-          }
-        ]
-      }
-      @sys.description('Optional. The rule name.')
-      name: 'string'
-      @sys.description('Optional. The duration for which the circuit will be tripped.')
-      tripDuration: 'string'
-    }
-  ]
+  rules: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.circuitBreaker.rules?
 }
 
 @sys.description('Backend Pool Properties.')
 type BackendPool = {
   @sys.description('Optional. The list of backend entities belonging to a pool.')
-  services: [
-    {
-      @sys.description('Required. The unique ARM id of the backend entity. The ARM id should refer to an already existing backend entity.')
-      id: string
-      @sys.description('Optional. The priority of the backend entity in the backend pool. Must be between 0 and 100. It can be also null if the value not specified.')
-      @minValue(0)
-      @maxValue(100)
-      priority: int
-      @sys.description('Optional. The weight of the backend entity in the backend pool. Must be between 0 and 100. It can be also null if the value not specified.')
-      @minValue(0)
-      @maxValue(100)
-      weight: int
-    }
-  ]
+  services: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.pool.services?
 }
