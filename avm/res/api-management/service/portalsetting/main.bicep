@@ -40,15 +40,33 @@ output resourceGroupName string = resourceGroup().name
 
 @description('Portal setting properties for delegation, signin, or signup. See documentation for which properties are required for each setting.')
 type PortalSettingProperties = {
-  // For 'signin' and 'signup'
+  @sys.description('Conditional. Required for "signin": Redirect Anonymous users to the Sign-In page. Required for "signup": Allow users to sign up on a developer portal.')
   enabled: bool
 
-  // For 'signup'
-  termsOfService: object
+  @sys.description('Conditional. Required for "signup".')
+  termsOfService: {
+    @sys.description('Required. Ask user for consent to the terms of service.')
+    consentRequired: bool
+    @sys.description('Required. Display terms of service during a sign-up process.')
+    enabled: bool
+    @sys.description('Required. A terms of service text.')
+    text: 'string'
+  }
 
-  // For 'delegation'
-  subscriptions: object
+  @sys.description('Conditional. Required for "delegation". Subscriptions delegation settings.')
+  subscriptions: {
+    @sys.description('Required. Enable or disable delegation for subscriptions.')
+    enabled: bool
+  }
+
+  @sys.description('Conditional. Required for "delegation". A delegation Url.')
   url: string
-  userRegistration: object
+  userRegistration: {
+    @sys.description('Required. Enable or disable delegation for user registration.')
+    enabled: bool
+  }
+
+  @secure()
+  @description('Conditional. Required for "delegation". A base64-encoded validation key to validate, that a request is coming from Azure API Management.')
   validationKey: string
 }
