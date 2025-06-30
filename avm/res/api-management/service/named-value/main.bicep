@@ -7,12 +7,6 @@ param apiManagementServiceName string
 @description('Required. Unique name of NamedValue. It may contain only letters, digits, period, dash, and underscore characters.')
 param displayName string
 
-@description('KeyVault contract for API Management Named Value.')
-type KeyVaultContract = {
-  secretIdentifier: string
-  identityClientId: string
-}
-
 @description('Optional. KeyVault location details of the namedValue.')
 param keyVault KeyVaultContract?
 
@@ -55,3 +49,13 @@ output name string = namedValue.name
 
 @description('The resource group the named value was deployed into.')
 output resourceGroupName string = resourceGroup().name
+
+// ================ //
+// Definitions      //
+// ================ //
+
+@description('KeyVault contract for API Management Named Value.')
+type KeyVaultContract = {
+  secretIdentifier: string
+  identityClientId: string
+}

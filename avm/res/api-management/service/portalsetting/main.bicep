@@ -13,7 +13,7 @@ param apiManagementServiceName string
 param name string
 
 @description('Required. Portal setting properties.')
-param properties object
+param properties PortalSettingProperties
 
 resource service 'Microsoft.ApiManagement/service@2024-05-01' existing = {
   name: apiManagementServiceName
@@ -33,3 +33,22 @@ output name string = portalSetting.name
 
 @description('The resource group the API management service portal setting was deployed into.')
 output resourceGroupName string = resourceGroup().name
+
+// ================ //
+// Definitions      //
+// ================ //
+
+@description('Portal setting properties for delegation, signin, or signup. See documentation for which properties are required for each setting.')
+type PortalSettingProperties = {
+  // For 'signin' and 'signup'
+  enabled: bool
+
+  // For 'signup'
+  termsOfService: object
+
+  // For 'delegation'
+  subscriptions: object
+  url: string
+  userRegistration: object
+  validationKey: string
+}

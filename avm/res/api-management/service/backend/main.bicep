@@ -7,53 +7,6 @@ param apiManagementServiceName string
 @sys.description('Required. Backend Name.')
 param name string
 
-// User-defined types for object parameters
-@sys.description('Backend Credentials Contract Properties.')
-type BackendCredentials = {
-  authorization: {
-    parameter: string
-    scheme: string
-  }
-  certificate: string[]
-  certificateIds: string[]
-  // Each property within header is an array of strings in format
-  // {customized property}: [
-  //   'string'
-  // ]
-  header: object
-  // Each property within query is an array of strings in format
-  // {customized property}: [
-  //   'string'
-  // ]
-  query: object
-}
-
-@sys.description('Backend Proxy Contract Properties.')
-type BackendProxy = {
-  password: 'string'
-  url: 'string'
-  username: 'string'
-}
-
-@sys.description('Backend Service Fabric Cluster Properties.')
-type BackendServiceFabricCluster = {
-  clientCertificateId: string
-  clientCertificatethumbprint: string
-  managementEndpoints: string[]
-  maxPartitionResolutionRetries: int
-  serverCertificateThumbprints: string[]
-  serverX509Names: {
-    issuerCertificateThumbprint: string
-    name: string
-  }[]
-}
-
-@sys.description('Backend TLS Properties.')
-type BackendTls = {
-  validateCertificateChain: bool
-  validateCertificateName: bool
-}
-
 @sys.description('Optional. Backend Credentials Contract Properties.')
 param credentials BackendCredentials?
 
@@ -114,3 +67,53 @@ output name string = backend.name
 
 @sys.description('The resource group the API management service backend was deployed into.')
 output resourceGroupName string = resourceGroup().name
+
+// ================ //
+// Definitions      //
+// ================ //
+
+@sys.description('Backend Credentials Contract Properties.')
+type BackendCredentials = {
+  authorization: {
+    parameter: string
+    scheme: string
+  }
+  certificate: string[]
+  certificateIds: string[]
+  // Each property within header is an array of strings in format
+  // {customized property}: [
+  //   'string'
+  // ]
+  header: object
+  // Each property within query is an array of strings in format
+  // {customized property}: [
+  //   'string'
+  // ]
+  query: object
+}
+
+@sys.description('Backend Proxy Contract Properties.')
+type BackendProxy = {
+  password: 'string'
+  url: 'string'
+  username: 'string'
+}
+
+@sys.description('Backend Service Fabric Cluster Properties.')
+type BackendServiceFabricCluster = {
+  clientCertificateId: string
+  clientCertificatethumbprint: string
+  managementEndpoints: string[]
+  maxPartitionResolutionRetries: int
+  serverCertificateThumbprints: string[]
+  serverX509Names: {
+    issuerCertificateThumbprint: string
+    name: string
+  }[]
+}
+
+@sys.description('Backend TLS Properties.')
+type BackendTls = {
+  validateCertificateChain: bool
+  validateCertificateName: bool
+}
