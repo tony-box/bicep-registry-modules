@@ -7,8 +7,55 @@ param apiManagementServiceName string
 @sys.description('Required. Backend Name.')
 param name string
 
+// User-defined types for object parameters
+@sys.description('Backend Credentials Contract Properties.')
+type BackendCredentials = {
+  authorization: {
+    parameter: string
+    scheme: string
+  }
+  certificate: string[]
+  certificateIds: string[]
+  // Each property within header is an array of strings in format
+  // {customized property}: [
+  //   'string'
+  // ]
+  header: object
+  // Each property within query is an array of strings in format
+  // {customized property}: [
+  //   'string'
+  // ]
+  query: object
+}
+
+@sys.description('Backend Proxy Contract Properties.')
+type BackendProxy = {
+  password: 'string'
+  url: 'string'
+  username: 'string'
+}
+
+@sys.description('Backend Service Fabric Cluster Properties.')
+type BackendServiceFabricCluster = {
+  clientCertificateId: string
+  clientCertificatethumbprint: string
+  managementEndpoints: string[]
+  maxPartitionResolutionRetries: int
+  serverCertificateThumbprints: string[]
+  serverX509Names: {
+    issuerCertificateThumbprint: string
+    name: string
+  }[]
+}
+
+@sys.description('Backend TLS Properties.')
+type BackendTls = {
+  validateCertificateChain: bool
+  validateCertificateName: bool
+}
+
 @sys.description('Optional. Backend Credentials Contract Properties.')
-param credentials object?
+param credentials BackendCredentials?
 
 @sys.description('Optional. Backend Description.')
 param description string?
@@ -17,19 +64,19 @@ param description string?
 param protocol string = 'http'
 
 @sys.description('Optional. Backend Proxy Contract Properties.')
-param proxy object?
+param proxy BackendProxy?
 
 @sys.description('Optional. Management Uri of the Resource in External System. This URL can be the Arm Resource ID of Logic Apps, Function Apps or API Apps.')
 param resourceId string?
 
 @sys.description('Optional. Backend Service Fabric Cluster Properties.')
-param serviceFabricCluster object?
+param serviceFabricCluster BackendServiceFabricCluster?
 
 @sys.description('Optional. Backend Title.')
 param title string?
 
 @sys.description('Optional. Backend TLS Properties.')
-param tls object = {
+param tls BackendTls = {
   validateCertificateChain: false
   validateCertificateName: false
 }
