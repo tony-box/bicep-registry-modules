@@ -146,8 +146,19 @@ param policies array?
 @description('Optional. Portal settings.')
 param portalsettings array?
 
+import { privateEndpointSingleServiceType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
+@sys.description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the \'sku\' to be \'Premium\', \'Developer\', \'Basic\', \'Standard\', \'StandardV2\', or \'BasicV2\'.')
+param privateEndpoints privateEndpointSingleServiceType[]?
+
 @description('Optional. Products.')
 param products array?
+
+@description('Optional. Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set.')
+@allowed([
+  'Enabled'
+  'Disabled'
+])
+param publicNetworkAccess string?
 
 @description('Optional. Subscriptions.')
 param subscriptions array?
@@ -157,6 +168,8 @@ param publicIpAddressResourceId string?
 
 @description('Optional. Enable the Developer Portal. The developer portal is not supported on the Consumption SKU.')
 param enableDeveloperPortal bool = false
+
+var enableReferencedModulesTelemetry = false
 
 var formattedUserAssignedIdentities = reduce(
   map((managedIdentities.?userAssignedResourceIds ?? []), (id) => { '${id}': {} }),
@@ -270,6 +283,9 @@ resource service 'Microsoft.ApiManagement/service@2024-05-01' = {
         }
       : null
     publicIpAddressId: publicIpAddressResourceId
+    publicNetworkAccess: !empty(publicNetworkAccess)
+      ? publicNetworkAccess
+      : (!empty(privateEndpoints) ? 'Disabled' : 'Enabled')
     apiVersionConstraint: !empty(minApiVersion)
       ? {
           minApiVersion: minApiVersion
@@ -586,6 +602,61 @@ resource service_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-0
   }
 ]
 
+module service_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11.0' = [
+  for (privateEndpoint, index) in (privateEndpoints ?? []): {
+    name: '${uniqueString(deployment().name, location)}-service-PrivateEndpoint-${index}'
+    scope: resourceGroup(
+      split(privateEndpoint.?resourceGroupResourceId ?? resourceGroup().id, '/')[2],
+      split(privateEndpoint.?resourceGroupResourceId ?? resourceGroup().id, '/')[4]
+    )
+    params: {
+      name: privateEndpoint.?name ?? 'pep-${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'service'}-${index}'
+      privateLinkServiceConnections: privateEndpoint.?isManualConnection != true
+        ? [
+            {
+              name: privateEndpoint.?privateLinkServiceConnectionName ?? '${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'service'}-${index}'
+              properties: {
+                privateLinkServiceId: service.id
+                groupIds: [
+                  privateEndpoint.?service ?? 'service'
+                ]
+              }
+            }
+          ]
+        : null
+      manualPrivateLinkServiceConnections: privateEndpoint.?isManualConnection == true
+        ? [
+            {
+              name: privateEndpoint.?privateLinkServiceConnectionName ?? '${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'service'}-${index}'
+              properties: {
+                privateLinkServiceId: service.id
+                groupIds: [
+                  privateEndpoint.?service ?? 'service'
+                ]
+                requestMessage: privateEndpoint.?manualConnectionRequestMessage ?? 'Manual approval required.'
+              }
+            }
+          ]
+        : null
+      subnetResourceId: privateEndpoint.subnetResourceId
+      enableTelemetry: enableReferencedModulesTelemetry
+      location: privateEndpoint.?location ?? reference(
+        split(privateEndpoint.subnetResourceId, '/subnets/')[0],
+        '2020-06-01',
+        'Full'
+      ).location
+      lock: privateEndpoint.?lock ?? lock
+      privateDnsZoneGroup: privateEndpoint.?privateDnsZoneGroup
+      roleAssignments: privateEndpoint.?roleAssignments
+      tags: privateEndpoint.?tags ?? tags
+      customDnsConfigs: privateEndpoint.?customDnsConfigs
+      ipConfigurations: privateEndpoint.?ipConfigurations
+      applicationSecurityGroupResourceIds: privateEndpoint.?applicationSecurityGroupResourceIds
+      customNetworkInterfaceName: privateEndpoint.?customNetworkInterfaceName
+    }
+  }
+]
+
 @description('The name of the API management service.')
 output name string = service.name
 
@@ -600,6 +671,17 @@ output systemAssignedMIPrincipalId string? = service.?identity.?principalId
 
 @description('The location the resource was deployed into.')
 output location string = service.location
+
+@description('The private endpoints of the API management service.')
+output privateEndpoints privateEndpointOutputType[] = [
+  for (pe, index) in (privateEndpoints ?? []): {
+    name: service_privateEndpoints[index].outputs.name
+    resourceId: service_privateEndpoints[index].outputs.resourceId
+    groupId: service_privateEndpoints[index].outputs.?groupId!
+    customDnsConfigs: service_privateEndpoints[index].outputs.customDnsConfigs
+    networkInterfaceResourceIds: service_privateEndpoints[index].outputs.networkInterfaceResourceIds
+  }
+]
 
 // =============== //
 //   Definitions   //
@@ -812,4 +894,29 @@ type additionalLocationType = {
 
   @sys.description('Optional. A list of availability zones denoting where the resource needs to come from.')
   availabilityZones: (1 | 2 | 3)[]?
+}
+
+@export()
+@description('The type for a private endpoint output.')
+type privateEndpointOutputType = {
+  @description('The name of the private endpoint.')
+  name: string
+
+  @description('The resource ID of the private endpoint.')
+  resourceId: string
+
+  @description('The group Id for the private endpoint Group.')
+  groupId: string?
+
+  @description('The custom DNS configurations of the private endpoint.')
+  customDnsConfigs: {
+    @description('FQDN that resolves to private endpoint IP address.')
+    fqdn: string?
+
+    @description('A list of private IP addresses of the private endpoint.')
+    ipAddresses: string[]
+  }[]
+
+  @description('The IDs of the network interfaces associated with the private endpoint.')
+  networkInterfaceResourceIds: string[]
 }

@@ -231,6 +231,33 @@ module testDeployment '../../../main.bicep' = [
           }
         }
       ]
+      privateEndpoints: [
+        {
+          subnetResourceId: nestedDependencies.outputs.privateEndpointSubnetResourceId
+          privateDnsZoneGroup: {
+            privateDnsZoneGroupConfigs: [
+              {
+                privateDnsZoneResourceId: nestedDependencies.outputs.privateDNSZoneResourceId
+              }
+            ]
+          }
+          tags: {
+            'hidden-title': 'This is visible in the resource name'
+            Environment: 'Non-Prod'
+            Role: 'DeploymentValidation'
+          }
+        }
+        {
+          subnetResourceId: nestedDependencies.outputs.privateEndpointSubnetResourceId
+          privateDnsZoneGroup: {
+            privateDnsZoneGroupConfigs: [
+              {
+                privateDnsZoneResourceId: nestedDependencies.outputs.privateDNSZoneResourceId
+              }
+            ]
+          }
+        }
+      ]
       products: [
         {
           apis: [
