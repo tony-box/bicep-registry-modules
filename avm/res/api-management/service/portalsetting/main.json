@@ -6,19 +6,19 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "1440930855302944012"
+      "templateHash": "16244598603916053118"
     },
     "name": "API Management Service Portal Settings",
     "description": "This module deploys an API Management Service Portal Setting."
   },
   "definitions": {
-    "PortalSettingProperties": {
+    "portalSettingPropertiesType": {
       "type": "object",
       "properties": {
         "enabled": {
           "type": "bool",
           "metadata": {
-            "description": "Conditional. Required for \"signin\": Redirect Anonymous users to the Sign-In page. Required for \"signup\": Allow users to sign up on a developer portal."
+            "description": "Conditional. Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal."
           }
         },
         "termsOfService": {
@@ -47,7 +47,7 @@
             }
           },
           "metadata": {
-            "description": "Conditional. Required for \"signup\"."
+            "description": "Conditional. if 'name' is 'signup'."
           }
         },
         "subscriptions": {
@@ -61,13 +61,13 @@
             }
           },
           "metadata": {
-            "description": "Conditional. Required for \"delegation\". Subscriptions delegation settings."
+            "description": "Conditional. Required if 'name' is 'delegation'. Subscriptions delegation settings."
           }
         },
         "url": {
           "type": "string",
           "metadata": {
-            "description": "Conditional. Required for \"delegation\". A delegation Url."
+            "description": "Conditional. Required if 'name' is 'delegation'. A delegation Url."
           }
         },
         "userRegistration": {
@@ -81,18 +81,15 @@
             }
           },
           "metadata": {
-            "description": "Conditional. Required for \"delegation\". User registration delegation settings."
+            "description": "Conditional. Required if 'name' is 'delegation'. User registration delegation settings."
           }
         },
         "validationKey": {
           "type": "securestring",
           "metadata": {
-            "description": "Conditional. Required for \"delegation\". A base64-encoded validation key to validate, that a request is coming from Azure API Management."
+            "description": "Conditional. Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management."
           }
         }
-      },
-      "metadata": {
-        "description": "Portal setting properties for delegation, signin, or signup. See documentation for which properties are required for each setting."
       }
     }
   },
@@ -115,7 +112,7 @@
       }
     },
     "properties": {
-      "$ref": "#/definitions/PortalSettingProperties",
+      "$ref": "#/definitions/portalSettingPropertiesType",
       "metadata": {
         "description": "Required. Portal setting properties."
       }

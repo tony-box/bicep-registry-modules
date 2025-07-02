@@ -6,13 +6,13 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "12997455737786754687"
+      "templateHash": "9483203334608330250"
     },
     "name": "API Management Service Named Values",
     "description": "This module deploys an API Management Service Named Value."
   },
   "definitions": {
-    "KeyVaultContract": {
+    "keyVaultContractType": {
       "type": "object",
       "properties": {
         "secretIdentifier": {
@@ -27,9 +27,6 @@
             "description": "Optional. Null for SystemAssignedIdentity or Client Id for UserAssignedIdentity , which will be used to access key vault secret."
           }
         }
-      },
-      "metadata": {
-        "description": "KeyVault contract for API Management Named Value."
       }
     }
   },
@@ -47,7 +44,7 @@
       }
     },
     "keyVault": {
-      "$ref": "#/definitions/KeyVaultContract",
+      "$ref": "#/definitions/keyVaultContractType",
       "nullable": true,
       "metadata": {
         "description": "Optional. KeyVault location details of the namedValue."

@@ -55,23 +55,23 @@ Portal setting properties.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`enabled`](#parameter-propertiesenabled) | bool | Required for "signin": Redirect Anonymous users to the Sign-In page. Required for "signup": Allow users to sign up on a developer portal. |
-| [`subscriptions`](#parameter-propertiessubscriptions) | object | Required for "delegation". Subscriptions delegation settings. |
-| [`termsOfService`](#parameter-propertiestermsofservice) | object | Required for "signup". |
-| [`url`](#parameter-propertiesurl) | string | Required for "delegation". A delegation Url. |
-| [`userRegistration`](#parameter-propertiesuserregistration) | object | Required for "delegation". User registration delegation settings. |
-| [`validationKey`](#parameter-propertiesvalidationkey) | securestring | Required for "delegation". A base64-encoded validation key to validate, that a request is coming from Azure API Management. |
+| [`enabled`](#parameter-propertiesenabled) | bool | Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal. |
+| [`subscriptions`](#parameter-propertiessubscriptions) | object | Required if 'name' is 'delegation'. Subscriptions delegation settings. |
+| [`termsOfService`](#parameter-propertiestermsofservice) | object | if 'name' is 'signup'. |
+| [`url`](#parameter-propertiesurl) | string | Required if 'name' is 'delegation'. A delegation Url. |
+| [`userRegistration`](#parameter-propertiesuserregistration) | object | Required if 'name' is 'delegation'. User registration delegation settings. |
+| [`validationKey`](#parameter-propertiesvalidationkey) | securestring | Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management. |
 
 ### Parameter: `properties.enabled`
 
-Required for "signin": Redirect Anonymous users to the Sign-In page. Required for "signup": Allow users to sign up on a developer portal.
+Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal.
 
 - Required: Yes
 - Type: bool
 
 ### Parameter: `properties.subscriptions`
 
-Required for "delegation". Subscriptions delegation settings.
+Required if 'name' is 'delegation'. Subscriptions delegation settings.
 
 - Required: Yes
 - Type: object
@@ -91,7 +91,7 @@ Enable or disable delegation for subscriptions.
 
 ### Parameter: `properties.termsOfService`
 
-Required for "signup".
+if 'name' is 'signup'.
 
 - Required: Yes
 - Type: object
@@ -133,14 +133,14 @@ A terms of service text.
 
 ### Parameter: `properties.url`
 
-Required for "delegation". A delegation Url.
+Required if 'name' is 'delegation'. A delegation Url.
 
 - Required: Yes
 - Type: string
 
 ### Parameter: `properties.userRegistration`
 
-Required for "delegation". User registration delegation settings.
+Required if 'name' is 'delegation'. User registration delegation settings.
 
 - Required: Yes
 - Type: object
@@ -160,7 +160,7 @@ Enable or disable delegation for user registration.
 
 ### Parameter: `properties.validationKey`
 
-Required for "delegation". A base64-encoded validation key to validate, that a request is coming from Azure API Management.
+Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management.
 
 - Required: Yes
 - Type: securestring

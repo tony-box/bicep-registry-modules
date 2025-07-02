@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "14487966100479234700"
+      "templateHash": "17034543256331928639"
     },
     "name": "API Management Services",
     "description": "This module deploys an API Management Service. The default deployment is set to use a Premium SKU to align with Microsoft WAF-aligned best practices. In most cases, non-prod deployments should use a lower-tier SKU."
@@ -613,7 +613,6 @@
         }
       },
       "metadata": {
-        "description": "The type of a policy.",
         "__bicep_imported_from!": {
           "sourceTemplate": "api/operation/main.bicep"
         }
@@ -1061,7 +1060,6 @@
         }
       },
       "metadata": {
-        "description": "The type of a diagnostic configuration.",
         "__bicep_imported_from!": {
           "sourceTemplate": "api/main.bicep"
         }
@@ -1201,7 +1199,6 @@
         }
       },
       "metadata": {
-        "description": "The type of an operation.",
         "__bicep_imported_from!": {
           "sourceTemplate": "api/main.bicep"
         }
@@ -1238,7 +1235,6 @@
         }
       },
       "metadata": {
-        "description": "The type of a policy.",
         "__bicep_imported_from!": {
           "sourceTemplate": "api/main.bicep"
         }
@@ -1478,7 +1474,6 @@
         }
       },
       "metadata": {
-        "description": "The type for a token body parameter.",
         "__bicep_imported_from!": {
           "sourceTemplate": "authorization-server/main.bicep"
         }
@@ -2092,7 +2087,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "1318274451678203270"
+              "templateHash": "395708245825499818"
             },
             "name": "API Management Service APIs",
             "description": "This module deploys an API Management Service API."
@@ -2174,8 +2169,7 @@
                 }
               },
               "metadata": {
-                "__bicep_export!": true,
-                "description": "The type of an operation."
+                "__bicep_export!": true
               }
             },
             "policyType": {
@@ -2209,8 +2203,7 @@
                 }
               },
               "metadata": {
-                "__bicep_export!": true,
-                "description": "The type of a policy."
+                "__bicep_export!": true
               }
             },
             "diagnosticType": {
@@ -2319,8 +2312,7 @@
                 }
               },
               "metadata": {
-                "__bicep_export!": true,
-                "description": "The type of a diagnostic configuration."
+                "__bicep_export!": true
               }
             },
             "_1.policyType": {
@@ -2352,7 +2344,6 @@
                 }
               },
               "metadata": {
-                "description": "The type of a policy.",
                 "__bicep_imported_from!": {
                   "sourceTemplate": "operation/main.bicep"
                 }
@@ -3048,7 +3039,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.36.1.42791",
-                      "templateHash": "11892051320650079986"
+                      "templateHash": "12880998990916236901"
                     },
                     "name": "API Management Service APIs Operations",
                     "description": "This module deploys an API Management Service API Operation."
@@ -3083,8 +3074,7 @@
                         }
                       },
                       "metadata": {
-                        "__bicep_export!": true,
-                        "description": "The type of a policy."
+                        "__bicep_export!": true
                       }
                     }
                   },
@@ -3624,7 +3614,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "11769133040405783972"
+              "templateHash": "5444148386188931298"
             },
             "name": "API Management Service Authorization Servers",
             "description": "This module deploys an API Management Service Authorization Server."
@@ -3647,8 +3637,7 @@
                 }
               },
               "metadata": {
-                "__bicep_export!": true,
-                "description": "The type for a token body parameter."
+                "__bicep_export!": true
               }
             }
           },
@@ -3914,13 +3903,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "7517465253133800195"
+              "templateHash": "3605548400890358528"
             },
             "name": "API Management Service Backends",
             "description": "This module deploys an API Management Service Backend."
           },
           "definitions": {
-            "BackendCredentials": {
+            "backendCredentialsType": {
               "type": "object",
               "properties": {
                 "authorization": {
@@ -3963,12 +3952,9 @@
                     "description": "Optional. Query Parameter description."
                   }
                 }
-              },
-              "metadata": {
-                "description": "Backend Credentials Contract Properties."
               }
             },
-            "BackendProxy": {
+            "backendProxyType": {
               "type": "object",
               "properties": {
                 "password": {
@@ -4000,12 +3986,9 @@
                     "description": "Optional. Username to connect to the WebProxy server."
                   }
                 }
-              },
-              "metadata": {
-                "description": "Backend Proxy Contract Properties."
               }
             },
-            "BackendServiceFabricCluster": {
+            "backendServiceFabricClusterType": {
               "type": "object",
               "properties": {
                 "clientCertificateId": {
@@ -4054,12 +4037,9 @@
                   },
                   "nullable": true
                 }
-              },
-              "metadata": {
-                "description": "Backend Service Fabric Cluster Properties."
               }
             },
-            "BackendTls": {
+            "backendTlsType": {
               "type": "object",
               "properties": {
                 "validateCertificateChain": {
@@ -4074,12 +4054,9 @@
                     "description": "Optional. Flag indicating whether SSL certificate name validation should be done when using self-signed certificates for this backend host."
                   }
                 }
-              },
-              "metadata": {
-                "description": "Backend TLS Properties."
               }
             },
-            "BackendCircuitBreaker": {
+            "backendCircuitBreakerType": {
               "type": "object",
               "properties": {
                 "rules": {
@@ -4092,12 +4069,9 @@
                   },
                   "nullable": true
                 }
-              },
-              "metadata": {
-                "description": "Backend Circuit Breaker Contract Properties."
               }
             },
-            "BackendPool": {
+            "backendPoolType": {
               "type": "object",
               "properties": {
                 "services": {
@@ -4110,9 +4084,6 @@
                   },
                   "nullable": true
                 }
-              },
-              "metadata": {
-                "description": "Backend Pool Properties."
               }
             }
           },
@@ -4120,7 +4091,7 @@
             "apiManagementServiceName": {
               "type": "string",
               "metadata": {
-                "description": "Conditional. The name of the parent API Management service. Required if the template is used in a standalone deployment."
+                "description": "Conditional. Required if the template is used in a standalone deployment. The name of the parent API Management service."
               }
             },
             "name": {
@@ -4130,7 +4101,7 @@
               }
             },
             "credentials": {
-              "$ref": "#/definitions/BackendCredentials",
+              "$ref": "#/definitions/backendCredentialsType",
               "nullable": true,
               "metadata": {
                 "description": "Optional. Backend Credentials Contract Properties."
@@ -4151,7 +4122,7 @@
               }
             },
             "proxy": {
-              "$ref": "#/definitions/BackendProxy",
+              "$ref": "#/definitions/backendProxyType",
               "nullable": true,
               "metadata": {
                 "description": "Optional. Backend gateway Contract Properties."
@@ -4165,7 +4136,7 @@
               }
             },
             "serviceFabricCluster": {
-              "$ref": "#/definitions/BackendServiceFabricCluster",
+              "$ref": "#/definitions/backendServiceFabricClusterType",
               "nullable": true,
               "metadata": {
                 "description": "Optional. Backend Service Fabric Cluster Properties."
@@ -4179,7 +4150,7 @@
               }
             },
             "tls": {
-              "$ref": "#/definitions/BackendTls",
+              "$ref": "#/definitions/backendTlsType",
               "defaultValue": {
                 "validateCertificateChain": false,
                 "validateCertificateName": false
@@ -4195,14 +4166,14 @@
               }
             },
             "circuitBreaker": {
-              "$ref": "#/definitions/BackendCircuitBreaker",
+              "$ref": "#/definitions/backendCircuitBreakerType",
               "nullable": true,
               "metadata": {
                 "description": "Optional. Backend Circuit Breaker Configuration."
               }
             },
             "pool": {
-              "$ref": "#/definitions/BackendPool",
+              "$ref": "#/definitions/backendPoolType",
               "nullable": true,
               "metadata": {
                 "description": "Optional. Backend pool configuration for load balancing."
@@ -5080,13 +5051,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "12997455737786754687"
+              "templateHash": "9483203334608330250"
             },
             "name": "API Management Service Named Values",
             "description": "This module deploys an API Management Service Named Value."
           },
           "definitions": {
-            "KeyVaultContract": {
+            "keyVaultContractType": {
               "type": "object",
               "properties": {
                 "secretIdentifier": {
@@ -5101,9 +5072,6 @@
                     "description": "Optional. Null for SystemAssignedIdentity or Client Id for UserAssignedIdentity , which will be used to access key vault secret."
                   }
                 }
-              },
-              "metadata": {
-                "description": "KeyVault contract for API Management Named Value."
               }
             }
           },
@@ -5121,7 +5089,7 @@
               }
             },
             "keyVault": {
-              "$ref": "#/definitions/KeyVaultContract",
+              "$ref": "#/definitions/keyVaultContractType",
               "nullable": true,
               "metadata": {
                 "description": "Optional. KeyVault location details of the namedValue."
@@ -5240,19 +5208,19 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "1440930855302944012"
+              "templateHash": "16244598603916053118"
             },
             "name": "API Management Service Portal Settings",
             "description": "This module deploys an API Management Service Portal Setting."
           },
           "definitions": {
-            "PortalSettingProperties": {
+            "portalSettingPropertiesType": {
               "type": "object",
               "properties": {
                 "enabled": {
                   "type": "bool",
                   "metadata": {
-                    "description": "Conditional. Required for \"signin\": Redirect Anonymous users to the Sign-In page. Required for \"signup\": Allow users to sign up on a developer portal."
+                    "description": "Conditional. Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal."
                   }
                 },
                 "termsOfService": {
@@ -5281,7 +5249,7 @@
                     }
                   },
                   "metadata": {
-                    "description": "Conditional. Required for \"signup\"."
+                    "description": "Conditional. if 'name' is 'signup'."
                   }
                 },
                 "subscriptions": {
@@ -5295,13 +5263,13 @@
                     }
                   },
                   "metadata": {
-                    "description": "Conditional. Required for \"delegation\". Subscriptions delegation settings."
+                    "description": "Conditional. Required if 'name' is 'delegation'. Subscriptions delegation settings."
                   }
                 },
                 "url": {
                   "type": "string",
                   "metadata": {
-                    "description": "Conditional. Required for \"delegation\". A delegation Url."
+                    "description": "Conditional. Required if 'name' is 'delegation'. A delegation Url."
                   }
                 },
                 "userRegistration": {
@@ -5315,18 +5283,15 @@
                     }
                   },
                   "metadata": {
-                    "description": "Conditional. Required for \"delegation\". User registration delegation settings."
+                    "description": "Conditional. Required if 'name' is 'delegation'. User registration delegation settings."
                   }
                 },
                 "validationKey": {
                   "type": "securestring",
                   "metadata": {
-                    "description": "Conditional. Required for \"delegation\". A base64-encoded validation key to validate, that a request is coming from Azure API Management."
+                    "description": "Conditional. Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management."
                   }
                 }
-              },
-              "metadata": {
-                "description": "Portal setting properties for delegation, signin, or signup. See documentation for which properties are required for each setting."
               }
             }
           },
@@ -5349,7 +5314,7 @@
               }
             },
             "properties": {
-              "$ref": "#/definitions/PortalSettingProperties",
+              "$ref": "#/definitions/portalSettingPropertiesType",
               "metadata": {
                 "description": "Required. Portal setting properties."
               }

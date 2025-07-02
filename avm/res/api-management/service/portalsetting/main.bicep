@@ -13,7 +13,7 @@ param apiManagementServiceName string
 param name string
 
 @description('Required. Portal setting properties.')
-param properties PortalSettingProperties
+param properties portalSettingPropertiesType
 
 resource service 'Microsoft.ApiManagement/service@2024-05-01' existing = {
   name: apiManagementServiceName
@@ -38,12 +38,11 @@ output resourceGroupName string = resourceGroup().name
 // Definitions      //
 // ================ //
 
-@description('Portal setting properties for delegation, signin, or signup. See documentation for which properties are required for each setting.')
-type PortalSettingProperties = {
-  @sys.description('Conditional. Required for "signin": Redirect Anonymous users to the Sign-In page. Required for "signup": Allow users to sign up on a developer portal.')
+type portalSettingPropertiesType = {
+  @sys.description('Conditional. Required if \'name\' is \'signin\' or \'signup\'. \'signin\': Redirect Anonymous users to the Sign-In page. \'signup\': Allow users to sign up on a developer portal.')
   enabled: bool
 
-  @sys.description('Conditional. Required for "signup".')
+  @sys.description('Conditional. if \'name\' is \'signup\'.')
   termsOfService: {
     @sys.description('Required. Ask user for consent to the terms of service.')
     consentRequired: bool
@@ -53,22 +52,22 @@ type PortalSettingProperties = {
     text: 'string'
   }
 
-  @sys.description('Conditional. Required for "delegation". Subscriptions delegation settings.')
+  @sys.description('Conditional. Required if \'name\' is \'delegation\'. Subscriptions delegation settings.')
   subscriptions: {
     @sys.description('Required. Enable or disable delegation for subscriptions.')
     enabled: bool
   }
 
-  @sys.description('Conditional. Required for "delegation". A delegation Url.')
+  @sys.description('Conditional. Required if \'name\' is \'delegation\'. A delegation Url.')
   url: string
 
-  @sys.description('Conditional. Required for "delegation". User registration delegation settings.')
+  @sys.description('Conditional. Required if \'name\' is \'delegation\'. User registration delegation settings.')
   userRegistration: {
     @sys.description('Required. Enable or disable delegation for user registration.')
     enabled: bool
   }
 
   @secure()
-  @description('Conditional. Required for "delegation". A base64-encoded validation key to validate, that a request is coming from Azure API Management.')
+  @description('Conditional. Required if \'name\' is \'delegation\'. A base64-encoded validation key to validate, that a request is coming from Azure API Management.')
   validationKey: string
 }

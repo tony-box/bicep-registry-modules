@@ -1,14 +1,14 @@
 metadata name = 'API Management Service Backends'
 metadata description = 'This module deploys an API Management Service Backend.'
 
-@sys.description('Conditional. The name of the parent API Management service. Required if the template is used in a standalone deployment.')
+@sys.description('Conditional. Required if the template is used in a standalone deployment. The name of the parent API Management service.')
 param apiManagementServiceName string
 
 @sys.description('Required. Backend Name.')
 param name string
 
 @sys.description('Optional. Backend Credentials Contract Properties.')
-param credentials BackendCredentials?
+param credentials backendCredentialsType?
 
 @sys.description('Optional. Backend Description.')
 param description string?
@@ -17,19 +17,19 @@ param description string?
 param protocol string = 'http'
 
 @sys.description('Optional. Backend gateway Contract Properties.')
-param proxy BackendProxy?
+param proxy backendProxyType?
 
 @sys.description('Optional. Management Uri of the Resource in External System. This URL can be the Arm Resource ID of Logic Apps, Function Apps or API Apps.')
 param resourceId string?
 
 @sys.description('Optional. Backend Service Fabric Cluster Properties.')
-param serviceFabricCluster BackendServiceFabricCluster?
+param serviceFabricCluster backendServiceFabricClusterType?
 
 @sys.description('Optional. Backend Title.')
 param title string?
 
 @sys.description('Optional. Backend TLS Properties.')
-param tls BackendTls = {
+param tls backendTlsType = {
   validateCertificateChain: false
   validateCertificateName: false
 }
@@ -38,10 +38,10 @@ param tls BackendTls = {
 param url string
 
 @sys.description('Optional. Backend Circuit Breaker Configuration.')
-param circuitBreaker BackendCircuitBreaker?
+param circuitBreaker backendCircuitBreakerType?
 
 @sys.description('Optional. Backend pool configuration for load balancing.')
-param pool BackendPool?
+param pool backendPoolType?
 
 @sys.description('Optional. Type of the backend. A backend can be either Single or Pool.')
 @allowed(['Single', 'Pool'])
@@ -85,8 +85,7 @@ output resourceGroupName string = resourceGroup().name
 // Definitions      //
 // ================ //
 
-@sys.description('Backend Credentials Contract Properties.')
-type BackendCredentials = {
+type backendCredentialsType = {
   @sys.description('Optional. Authorization header authentication.')
   authorization: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.credentials.authorization?
   @sys.description('Optional. List of Client Certificate Thumbprints. Will be ignored if certificatesIds are provided.')
@@ -107,8 +106,7 @@ type BackendCredentials = {
   query: object
 }
 
-@sys.description('Backend Proxy Contract Properties.')
-type BackendProxy = {
+type backendProxyType = {
   @secure()
   @sys.description('Optional. Password to connect to the WebProxy Server.')
   password: 'string'
@@ -120,8 +118,7 @@ type BackendProxy = {
   username: 'string'
 }
 
-@sys.description('Backend Service Fabric Cluster Properties.')
-type BackendServiceFabricCluster = {
+type backendServiceFabricClusterType = {
   @sys.description('Optional. The client certificate id for the management endpoint.')
   clientCertificateId: string
   @sys.description('Optional. The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided')
@@ -136,22 +133,19 @@ type BackendServiceFabricCluster = {
   serverX509Names: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.properties.serviceFabricCluster.serverX509Names?
 }
 
-@sys.description('Backend TLS Properties.')
-type BackendTls = {
+type backendTlsType = {
   @sys.description('Optional. Flag indicating whether SSL certificate chain validation should be done when using self-signed certificates for this backend host.')
   validateCertificateChain: bool
   @sys.description('Optional. Flag indicating whether SSL certificate name validation should be done when using self-signed certificates for this backend host.')
   validateCertificateName: bool
 }
 
-@sys.description('Backend Circuit Breaker Contract Properties.')
-type BackendCircuitBreaker = {
+type backendCircuitBreakerType = {
   @sys.description('Optional. The rules for tripping the backend.')
   rules: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.circuitBreaker.rules?
 }
 
-@sys.description('Backend Pool Properties.')
-type BackendPool = {
+type backendPoolType = {
   @sys.description('Optional. The list of backend entities belonging to a pool.')
   services: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.pool.services?
 }

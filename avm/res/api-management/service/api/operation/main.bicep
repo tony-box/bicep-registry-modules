@@ -84,7 +84,6 @@ output resourceGroupName string = resourceGroup().name
 // =============== //
 
 @export()
-@sys.description('The type of a policy.')
 type policyType = {
   @sys.description('Required. The name of the policy.')
   name: string

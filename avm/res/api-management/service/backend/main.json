@@ -6,13 +6,13 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "7517465253133800195"
+      "templateHash": "3605548400890358528"
     },
     "name": "API Management Service Backends",
     "description": "This module deploys an API Management Service Backend."
   },
   "definitions": {
-    "BackendCredentials": {
+    "backendCredentialsType": {
       "type": "object",
       "properties": {
         "authorization": {
@@ -55,12 +55,9 @@
             "description": "Optional. Query Parameter description."
           }
         }
-      },
-      "metadata": {
-        "description": "Backend Credentials Contract Properties."
       }
     },
-    "BackendProxy": {
+    "backendProxyType": {
       "type": "object",
       "properties": {
         "password": {
@@ -92,12 +89,9 @@
             "description": "Optional. Username to connect to the WebProxy server."
           }
         }
-      },
-      "metadata": {
-        "description": "Backend Proxy Contract Properties."
       }
     },
-    "BackendServiceFabricCluster": {
+    "backendServiceFabricClusterType": {
       "type": "object",
       "properties": {
         "clientCertificateId": {
@@ -146,12 +140,9 @@
           },
           "nullable": true
         }
-      },
-      "metadata": {
-        "description": "Backend Service Fabric Cluster Properties."
       }
     },
-    "BackendTls": {
+    "backendTlsType": {
       "type": "object",
       "properties": {
         "validateCertificateChain": {
@@ -166,12 +157,9 @@
             "description": "Optional. Flag indicating whether SSL certificate name validation should be done when using self-signed certificates for this backend host."
           }
         }
-      },
-      "metadata": {
-        "description": "Backend TLS Properties."
       }
     },
-    "BackendCircuitBreaker": {
+    "backendCircuitBreakerType": {
       "type": "object",
       "properties": {
         "rules": {
@@ -184,12 +172,9 @@
           },
           "nullable": true
         }
-      },
-      "metadata": {
-        "description": "Backend Circuit Breaker Contract Properties."
       }
     },
-    "BackendPool": {
+    "backendPoolType": {
       "type": "object",
       "properties": {
         "services": {
@@ -202,9 +187,6 @@
           },
           "nullable": true
         }
-      },
-      "metadata": {
-        "description": "Backend Pool Properties."
       }
     }
   },
@@ -212,7 +194,7 @@
     "apiManagementServiceName": {
       "type": "string",
       "metadata": {
-        "description": "Conditional. The name of the parent API Management service. Required if the template is used in a standalone deployment."
+        "description": "Conditional. Required if the template is used in a standalone deployment. The name of the parent API Management service."
       }
     },
     "name": {
@@ -222,7 +204,7 @@
       }
     },
     "credentials": {
-      "$ref": "#/definitions/BackendCredentials",
+      "$ref": "#/definitions/backendCredentialsType",
       "nullable": true,
       "metadata": {
         "description": "Optional. Backend Credentials Contract Properties."
@@ -243,7 +225,7 @@
       }
     },
     "proxy": {
-      "$ref": "#/definitions/BackendProxy",
+      "$ref": "#/definitions/backendProxyType",
       "nullable": true,
       "metadata": {
         "description": "Optional. Backend gateway Contract Properties."
@@ -257,7 +239,7 @@
       }
     },
     "serviceFabricCluster": {
-      "$ref": "#/definitions/BackendServiceFabricCluster",
+      "$ref": "#/definitions/backendServiceFabricClusterType",
       "nullable": true,
       "metadata": {
         "description": "Optional. Backend Service Fabric Cluster Properties."
@@ -271,7 +253,7 @@
       }
     },
     "tls": {
-      "$ref": "#/definitions/BackendTls",
+      "$ref": "#/definitions/backendTlsType",
       "defaultValue": {
         "validateCertificateChain": false,
         "validateCertificateName": false
@@ -287,14 +269,14 @@
       }
     },
     "circuitBreaker": {
-      "$ref": "#/definitions/BackendCircuitBreaker",
+      "$ref": "#/definitions/backendCircuitBreakerType",
       "nullable": true,
       "metadata": {
         "description": "Optional. Backend Circuit Breaker Configuration."
       }
     },
     "pool": {
-      "$ref": "#/definitions/BackendPool",
+      "$ref": "#/definitions/backendPoolType",
       "nullable": true,
       "metadata": {
         "description": "Optional. Backend pool configuration for load balancing."

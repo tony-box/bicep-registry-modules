@@ -28,7 +28,7 @@ This module deploys an API Management Service Backend.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`apiManagementServiceName`](#parameter-apimanagementservicename) | string | The name of the parent API Management service. Required if the template is used in a standalone deployment. |
+| [`apiManagementServiceName`](#parameter-apimanagementservicename) | string | Required if the template is used in a standalone deployment. The name of the parent API Management service. |
 
 **Optional parameters**
 
@@ -62,7 +62,7 @@ Runtime URL of the Backend.
 
 ### Parameter: `apiManagementServiceName`
 
-The name of the parent API Management service. Required if the template is used in a standalone deployment.
+Required if the template is used in a standalone deployment. The name of the parent API Management service.
 
 - Required: Yes
 - Type: string

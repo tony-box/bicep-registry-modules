@@ -117,7 +117,6 @@ output resourceGroupName string = resourceGroup().name
 // =============== //
 
 @export()
-@description('The type for a token body parameter.')
 type tokenBodyParameterType = {
   @description('Required. Body parameter name.')
   name: string

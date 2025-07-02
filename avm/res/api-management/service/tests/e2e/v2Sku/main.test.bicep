@@ -18,7 +18,7 @@ param resourceLocation string = deployment().location
 param serviceShort string = 'apisv2s'
 
 @description('Optional. A token to inject into the name of each resource.')
-param namePrefix string = '#_namePrefix_#'
+param namePrefix string = 'apim01'
 
 // ============ //
 // Dependencies //

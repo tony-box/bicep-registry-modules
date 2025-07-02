@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "11892051320650079986"
+      "templateHash": "12880998990916236901"
     },
     "name": "API Management Service APIs Operations",
     "description": "This module deploys an API Management Service API Operation."
@@ -41,8 +41,7 @@
         }
       },
       "metadata": {
-        "__bicep_export!": true,
-        "description": "The type of a policy."
+        "__bicep_export!": true
       }
     }
   },

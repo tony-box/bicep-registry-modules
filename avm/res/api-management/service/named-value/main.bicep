@@ -8,7 +8,7 @@ param apiManagementServiceName string
 param displayName string
 
 @description('Optional. KeyVault location details of the namedValue.')
-param keyVault KeyVaultContract?
+param keyVault keyVaultContractType?
 
 @description('Required. Named value Name.')
 param name string
@@ -54,8 +54,7 @@ output resourceGroupName string = resourceGroup().name
 // Definitions      //
 // ================ //
 
-@description('KeyVault contract for API Management Named Value.')
-type KeyVaultContract = {
+type keyVaultContractType = {
   @description('Optional. Key vault secret identifier for fetching secret. Providing a versioned secret will prevent auto-refresh. This requires API Management service to be configured with aka.ms/apimmsi.')
   secretIdentifier: string
   @description('Optional. Null for SystemAssignedIdentity or Client Id for UserAssignedIdentity , which will be used to access key vault secret.')

@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "1318274451678203270"
+      "templateHash": "395708245825499818"
     },
     "name": "API Management Service APIs",
     "description": "This module deploys an API Management Service API."
@@ -88,8 +88,7 @@
         }
       },
       "metadata": {
-        "__bicep_export!": true,
-        "description": "The type of an operation."
+        "__bicep_export!": true
       }
     },
     "policyType": {
@@ -123,8 +122,7 @@
         }
       },
       "metadata": {
-        "__bicep_export!": true,
-        "description": "The type of a policy."
+        "__bicep_export!": true
       }
     },
     "diagnosticType": {
@@ -233,8 +231,7 @@
         }
       },
       "metadata": {
-        "__bicep_export!": true,
-        "description": "The type of a diagnostic configuration."
+        "__bicep_export!": true
       }
     },
     "_1.policyType": {
@@ -266,7 +263,6 @@
         }
       },
       "metadata": {
-        "description": "The type of a policy.",
         "__bicep_imported_from!": {
           "sourceTemplate": "operation/main.bicep"
         }
@@ -962,7 +958,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "11892051320650079986"
+              "templateHash": "12880998990916236901"
             },
             "name": "API Management Service APIs Operations",
             "description": "This module deploys an API Management Service API Operation."
@@ -997,8 +993,7 @@
                 }
               },
               "metadata": {
-                "__bicep_export!": true,
-                "description": "The type of a policy."
+                "__bicep_export!": true
               }
             }
           },
