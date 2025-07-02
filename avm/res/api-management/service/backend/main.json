@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "4397683497063159689"
+      "templateHash": "10478821704200011227"
     },
     "name": "API Management Service Backends",
     "description": "This module deploys an API Management Service Backend."
@@ -102,7 +102,7 @@
           "type": "string",
           "nullable": true,
           "metadata": {
-            "description": "Optional. The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided"
+            "description": "Optional. The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided."
           }
         },
         "managementEndpoints": {
@@ -128,7 +128,7 @@
           },
           "nullable": true,
           "metadata": {
-            "description": "Optional. Thumbprints of certificates cluster management service uses for tls communication"
+            "description": "Optional. Thumbprints of certificates cluster management service uses for tls communication."
           }
         },
         "serverX509Names": {

@@ -121,13 +121,13 @@ type backendProxyType = {
 type backendServiceFabricClusterType = {
   @sys.description('Optional. The client certificate id for the management endpoint.')
   clientCertificateId: string?
-  @sys.description('Optional. The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided')
+  @sys.description('Optional. The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided.')
   clientCertificatethumbprint: string?
   @sys.description('Required. The cluster management endpoint.')
   managementEndpoints: string[]
   @sys.description('Optional. Maximum number of retries while attempting resolve the partition.')
   maxPartitionResolutionRetries: int?
-  @sys.description('Optional. Thumbprints of certificates cluster management service uses for tls communication')
+  @sys.description('Optional. Thumbprints of certificates cluster management service uses for tls communication.')
   serverCertificateThumbprints: string[]?
   @sys.description('Optional. Server X509 Certificate Names Collection.')
   serverX509Names: resourceInput<'Microsoft.ApiManagement/service/backends@2024-05-01'>.properties.properties.serviceFabricCluster.serverX509Names?

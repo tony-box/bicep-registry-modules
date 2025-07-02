@@ -240,9 +240,9 @@ Backend Service Fabric Cluster Properties.
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`clientCertificateId`](#parameter-servicefabricclusterclientcertificateid) | string | The client certificate id for the management endpoint. |
-| [`clientCertificatethumbprint`](#parameter-servicefabricclusterclientcertificatethumbprint) | string | The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided |
+| [`clientCertificatethumbprint`](#parameter-servicefabricclusterclientcertificatethumbprint) | string | The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided. |
 | [`maxPartitionResolutionRetries`](#parameter-servicefabricclustermaxpartitionresolutionretries) | int | Maximum number of retries while attempting resolve the partition. |
-| [`serverCertificateThumbprints`](#parameter-servicefabricclusterservercertificatethumbprints) | array | Thumbprints of certificates cluster management service uses for tls communication |
+| [`serverCertificateThumbprints`](#parameter-servicefabricclusterservercertificatethumbprints) | array | Thumbprints of certificates cluster management service uses for tls communication. |
 | [`serverX509Names`](#parameter-servicefabricclusterserverx509names) | array | Server X509 Certificate Names Collection. |
 
 ### Parameter: `serviceFabricCluster.managementEndpoints`
@@ -261,7 +261,7 @@ The client certificate id for the management endpoint.
 
 ### Parameter: `serviceFabricCluster.clientCertificatethumbprint`
 
-The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided
+The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided.
 
 - Required: No
 - Type: string
@@ -275,7 +275,7 @@ Maximum number of retries while attempting resolve the partition.
 
 ### Parameter: `serviceFabricCluster.serverCertificateThumbprints`
 
-Thumbprints of certificates cluster management service uses for tls communication
+Thumbprints of certificates cluster management service uses for tls communication.
 
 - Required: No
 - Type: array
