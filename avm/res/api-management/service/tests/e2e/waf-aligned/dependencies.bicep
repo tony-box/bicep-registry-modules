@@ -1,6 +1,9 @@
 @description('Optional. The location to deploy resources to.')
 param location string = resourceGroup().location
 
+@description('Required. The location to deploy resources to.')
+param lawReplicationRegion string
+
 @description('Required. The name of the managed identity to create.')
 param managedIdentityName string
 
@@ -17,7 +20,7 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-
   location: location
 }
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: 'logAnalyticsWorkspace'
   location: location
   tags: {
@@ -28,6 +31,10 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09
     type: 'SystemAssigned'
   }
   properties: {
+    replication: {
+      enabled: true
+      location: lawReplicationRegion
+    }
     sku: {
       name: 'PerGB2018'
     }

@@ -47,6 +47,7 @@ module nestedDependencies 'dependencies.bicep' = {
     managedIdentityName: 'dep-${namePrefix}-msi-${serviceShort}'
     virtualNetworkName: 'dep-${namePrefix}-vnet-${serviceShort}'
     networkSecurityGroupName: 'dep-${namePrefix}-nsg-${serviceShort}'
+    lawReplicationRegion: secondaryEnforcedLocation
   }
 }
 
