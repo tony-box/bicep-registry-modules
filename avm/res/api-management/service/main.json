@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "2484404844665965121"
+      "templateHash": "8838008411625523299"
     },
     "name": "API Management Services",
     "description": "This module deploys an API Management Service. The default deployment is set to use a Premium SKU to align with Microsoft WAF-aligned best practices. In most cases, non-prod deployments should use a lower-tier SKU."
@@ -1646,7 +1646,7 @@
       "type": "string",
       "nullable": true,
       "metadata": {
-        "description": "Optional. The full resource ID of a subnet in a virtual network to deploy the API Management service in."
+        "description": "Optional. The full resource ID of a subnet in a virtual network to deploy the API Management service in. VNet injection is supported with Developer, Premium, and StandardV2 SKUs only."
       }
     },
     "tags": {
@@ -1668,7 +1668,7 @@
         "Internal"
       ],
       "metadata": {
-        "description": "Optional. The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only."
+        "description": "Optional. The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. VNet injection (External/Internal) is supported with Developer, Premium, and StandardV2 SKUs only."
       }
     },
     "diagnosticSettings": {
@@ -1800,7 +1800,7 @@
       },
       "nullable": true,
       "metadata": {
-        "description": "Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the 'sku' to be 'Premium', 'Developer', 'Basic', 'Standard', 'StandardV2', or 'BasicV2'."
+        "description": "Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints."
       }
     },
     "products": {
@@ -1832,7 +1832,7 @@
       "type": "string",
       "nullable": true,
       "metadata": {
-        "description": "Optional. Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKU being deployed in Virtual Network."
+        "description": "Optional. Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKUs when deployed in Virtual Network."
       }
     },
     "enableDeveloperPortal": {
@@ -1851,6 +1851,66 @@
         "input": "[union(coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')], createObject('roleDefinitionId', coalesce(tryGet(variables('builtInRoleNames'), coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName), if(contains(coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/'), coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName)))))]"
       }
     ],
+    "skuCapabilities": {
+      "Consumption": {
+        "supportsPrivateEndpoints": false,
+        "supportsVNetInjection": false,
+        "supportsPublicIpAddress": false,
+        "supportsAdditionalLocations": false
+      },
+      "Developer": {
+        "supportsPrivateEndpoints": true,
+        "supportsVNetInjection": true,
+        "supportsPublicIpAddress": true,
+        "supportsAdditionalLocations": false
+      },
+      "Basic": {
+        "supportsPrivateEndpoints": true,
+        "supportsVNetInjection": false,
+        "supportsPublicIpAddress": false,
+        "supportsAdditionalLocations": false
+      },
+      "Standard": {
+        "supportsPrivateEndpoints": true,
+        "supportsVNetInjection": false,
+        "supportsPublicIpAddress": false,
+        "supportsAdditionalLocations": false
+      },
+      "Premium": {
+        "supportsPrivateEndpoints": true,
+        "supportsVNetInjection": true,
+        "supportsPublicIpAddress": true,
+        "supportsAdditionalLocations": true
+      },
+      "BasicV2": {
+        "supportsPrivateEndpoints": true,
+        "supportsVNetInjection": false,
+        "supportsPublicIpAddress": false,
+        "supportsAdditionalLocations": false
+      },
+      "StandardV2": {
+        "supportsPrivateEndpoints": true,
+        "supportsVNetInjection": true,
+        "supportsPublicIpAddress": false,
+        "supportsAdditionalLocations": false
+      }
+    },
+    "privateEndpointsRequested": "[not(empty(parameters('privateEndpoints')))]",
+    "privateEndpointsSupportedForSku": "[variables('skuCapabilities')[parameters('sku')].supportsPrivateEndpoints]",
+    "vnetInjectionRequested": "[or(not(equals(parameters('virtualNetworkType'), 'None')), not(empty(parameters('subnetResourceId'))))]",
+    "vnetInjectionSupportedForSku": "[variables('skuCapabilities')[parameters('sku')].supportsVNetInjection]",
+    "publicIpRequested": "[not(empty(parameters('publicIpAddressResourceId')))]",
+    "publicIpSupportedForSku": "[variables('skuCapabilities')[parameters('sku')].supportsPublicIpAddress]",
+    "additionalLocationsRequested": "[not(empty(parameters('additionalLocations')))]",
+    "additionalLocationsSupportedForSku": "[variables('skuCapabilities')[parameters('sku')].supportsAdditionalLocations]",
+    "internalVNetRequested": "[equals(parameters('virtualNetworkType'), 'Internal')]",
+    "privateEndpointsAllowed": "[or(not(variables('privateEndpointsRequested')), variables('privateEndpointsSupportedForSku'))]",
+    "vnetInjectionAllowed": "[or(not(variables('vnetInjectionRequested')), variables('vnetInjectionSupportedForSku'))]",
+    "publicIpAllowed": "[or(not(variables('publicIpRequested')), and(variables('publicIpSupportedForSku'), variables('vnetInjectionRequested')))]",
+    "additionalLocationsAllowed": "[or(not(variables('additionalLocationsRequested')), variables('additionalLocationsSupportedForSku'))]",
+    "internalVNetAllowed": "[or(not(variables('internalVNetRequested')), variables('vnetInjectionSupportedForSku'))]",
+    "configurationError": "[if(not(variables('privateEndpointsAllowed')), format('Private endpoints are not supported with the {0} SKU. Supported SKUs: Developer, Basic, Standard, Premium, BasicV2, StandardV2.', parameters('sku')), if(not(variables('vnetInjectionAllowed')), format('Virtual network injection is not supported with the {0} SKU. Supported SKUs for VNet injection: Developer, Premium, StandardV2.', parameters('sku')), if(and(and(not(variables('publicIpAllowed')), variables('publicIpRequested')), not(variables('vnetInjectionRequested'))), 'Public IP address can only be assigned when deploying to a virtual network (set virtualNetworkType or provide subnetResourceId).', if(not(variables('publicIpAllowed')), format('Public IP address assignment is not supported with the {0} SKU. Supported SKUs: Developer, Premium (when deployed in VNet).', parameters('sku')), if(not(variables('additionalLocationsAllowed')), 'Additional locations are only supported with the Premium SKU.', if(not(variables('internalVNetAllowed')), format('Internal virtual network mode is not supported with the {0} SKU. Supported SKUs: Developer, Premium, StandardV2.', parameters('sku')), ''))))))]",
+    "validationPassed": "[and(and(and(and(variables('privateEndpointsAllowed'), variables('vnetInjectionAllowed')), variables('publicIpAllowed')), variables('additionalLocationsAllowed')), variables('internalVNetAllowed'))]",
     "enableReferencedModulesTelemetry": false,
     "formattedUserAssignedIdentities": "[reduce(map(coalesce(tryGet(parameters('managedIdentities'), 'userAssignedResourceIds'), createArray()), lambda('id', createObject(format('{0}', lambdaVariables('id')), createObject()))), createObject(), lambda('cur', 'next', union(lambdaVariables('cur'), lambdaVariables('next'))))]",
     "identity": "[if(not(empty(parameters('managedIdentities'))), createObject('type', if(coalesce(tryGet(parameters('managedIdentities'), 'systemAssigned'), false()), if(not(empty(coalesce(tryGet(parameters('managedIdentities'), 'userAssignedResourceIds'), createObject()))), 'SystemAssigned,UserAssigned', 'SystemAssigned'), if(not(empty(coalesce(tryGet(parameters('managedIdentities'), 'userAssignedResourceIds'), createObject()))), 'UserAssigned', 'None')), 'userAssignedIdentities', if(not(empty(variables('formattedUserAssignedIdentities'))), variables('formattedUserAssignedIdentities'), null())), null())]",
@@ -1904,15 +1964,15 @@
         "publisherName": "[parameters('publisherName')]",
         "notificationSenderEmail": "[parameters('notificationSenderEmail')]",
         "hostnameConfigurations": "[parameters('hostnameConfigurations')]",
-        "additionalLocations": "[if(and(contains(parameters('sku'), 'Premium'), not(empty(parameters('additionalLocations')))), map(coalesce(parameters('additionalLocations'), createArray()), lambda('additLoc', createObject('location', lambdaVariables('additLoc').location, 'sku', lambdaVariables('additLoc').sku, 'disableGateway', tryGet(lambdaVariables('additLoc'), 'disableGateway'), 'natGatewayState', tryGet(lambdaVariables('additLoc'), 'natGatewayState'), 'publicIpAddressId', tryGet(lambdaVariables('additLoc'), 'publicIpAddressResourceId'), 'virtualNetworkConfiguration', tryGet(lambdaVariables('additLoc'), 'virtualNetworkConfiguration'), 'zones', map(coalesce(tryGet(lambdaVariables('additLoc'), 'availabilityZones'), createArray()), lambda('zone', string(lambdaVariables('zone'))))))), createArray())]",
+        "additionalLocations": "[if(and(and(variables('validationPassed'), contains(parameters('sku'), 'Premium')), not(empty(parameters('additionalLocations')))), map(coalesce(parameters('additionalLocations'), createArray()), lambda('additLoc', createObject('location', lambdaVariables('additLoc').location, 'sku', lambdaVariables('additLoc').sku, 'disableGateway', tryGet(lambdaVariables('additLoc'), 'disableGateway'), 'natGatewayState', tryGet(lambdaVariables('additLoc'), 'natGatewayState'), 'publicIpAddressId', tryGet(lambdaVariables('additLoc'), 'publicIpAddressResourceId'), 'virtualNetworkConfiguration', tryGet(lambdaVariables('additLoc'), 'virtualNetworkConfiguration'), 'zones', map(coalesce(tryGet(lambdaVariables('additLoc'), 'availabilityZones'), createArray()), lambda('zone', string(lambdaVariables('zone'))))))), if(and(not(variables('validationPassed')), not(empty(parameters('additionalLocations')))), json(format('null /* {0} */', variables('configurationError'))), createArray()))]",
         "customProperties": "[if(contains(parameters('sku'), 'Consumption'), null(), parameters('customProperties'))]",
         "certificates": "[parameters('certificates')]",
         "enableClientCertificate": "[if(parameters('enableClientCertificate'), true(), null())]",
         "disableGateway": "[parameters('disableGateway')]",
-        "virtualNetworkType": "[parameters('virtualNetworkType')]",
-        "virtualNetworkConfiguration": "[if(not(empty(parameters('subnetResourceId'))), createObject('subnetResourceId', parameters('subnetResourceId')), null())]",
-        "publicIpAddressId": "[parameters('publicIpAddressResourceId')]",
-        "publicNetworkAccess": "[if(not(empty(parameters('publicNetworkAccess'))), parameters('publicNetworkAccess'), if(not(empty(parameters('privateEndpoints'))), 'Disabled', 'Enabled'))]",
+        "virtualNetworkType": "[if(variables('validationPassed'), parameters('virtualNetworkType'), 'None')]",
+        "virtualNetworkConfiguration": "[if(and(variables('validationPassed'), not(empty(parameters('subnetResourceId')))), createObject('subnetResourceId', parameters('subnetResourceId')), if(and(not(variables('validationPassed')), not(empty(parameters('subnetResourceId')))), json(format('null /* {0} */', variables('configurationError'))), null()))]",
+        "publicIpAddressId": "[if(variables('validationPassed'), parameters('publicIpAddressResourceId'), if(not(empty(parameters('publicIpAddressResourceId'))), json(format('null /* {0} */', variables('configurationError'))), null()))]",
+        "publicNetworkAccess": "[if(not(empty(parameters('publicNetworkAccess'))), parameters('publicNetworkAccess'), if(and(and(variables('validationPassed'), not(empty(parameters('privateEndpoints')))), not(empty(parameters('subnetResourceId')))), 'Disabled', 'Enabled'))]",
         "apiVersionConstraint": "[if(not(empty(parameters('minApiVersion'))), createObject('minApiVersion', parameters('minApiVersion')), createObject('minApiVersion', '2021-08-01'))]",
         "restore": "[parameters('restore')]",
         "developerPortalStatus": "[if(not(equals(parameters('sku'), 'Consumption')), if(parameters('enableDeveloperPortal'), 'Enabled', 'Disabled'), null())]"
@@ -6028,13 +6088,13 @@
     "service_privateEndpoints": {
       "copy": {
         "name": "service_privateEndpoints",
-        "count": "[length(coalesce(parameters('privateEndpoints'), createArray()))]"
+        "count": "[length(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray()))]"
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('{0}-service-PrivateEndpoint-{1}', uniqueString(deployment().name, parameters('location')), copyIndex())]",
-      "subscriptionId": "[split(coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'resourceGroupResourceId'), resourceGroup().id), '/')[2]]",
-      "resourceGroup": "[split(coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'resourceGroupResourceId'), resourceGroup().id), '/')[4]]",
+      "subscriptionId": "[split(coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'resourceGroupResourceId'), resourceGroup().id), '/')[2]]",
+      "resourceGroup": "[split(coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'resourceGroupResourceId'), resourceGroup().id), '/')[4]]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -6042,42 +6102,42 @@
         "mode": "Incremental",
         "parameters": {
           "name": {
-            "value": "[coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'name'), format('pep-{0}-{1}-{2}', last(split(resourceId('Microsoft.ApiManagement/service', parameters('name')), '/')), coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'service'), 'service'), copyIndex()))]"
+            "value": "[coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'name'), format('pep-{0}-{1}-{2}', last(split(resourceId('Microsoft.ApiManagement/service', parameters('name')), '/')), coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'service'), 'service'), copyIndex()))]"
           },
-          "privateLinkServiceConnections": "[if(not(equals(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'isManualConnection'), true())), createObject('value', createArray(createObject('name', coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'privateLinkServiceConnectionName'), format('{0}-{1}-{2}', last(split(resourceId('Microsoft.ApiManagement/service', parameters('name')), '/')), coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'service'), 'service'), copyIndex())), 'properties', createObject('privateLinkServiceId', resourceId('Microsoft.ApiManagement/service', parameters('name')), 'groupIds', createArray(coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'service'), 'service')))))), createObject('value', null()))]",
-          "manualPrivateLinkServiceConnections": "[if(equals(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'isManualConnection'), true()), createObject('value', createArray(createObject('name', coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'privateLinkServiceConnectionName'), format('{0}-{1}-{2}', last(split(resourceId('Microsoft.ApiManagement/service', parameters('name')), '/')), coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'service'), 'service'), copyIndex())), 'properties', createObject('privateLinkServiceId', resourceId('Microsoft.ApiManagement/service', parameters('name')), 'groupIds', createArray(coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'service'), 'service')), 'requestMessage', coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'manualConnectionRequestMessage'), 'Manual approval required.'))))), createObject('value', null()))]",
+          "privateLinkServiceConnections": "[if(not(equals(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'isManualConnection'), true())), createObject('value', createArray(createObject('name', coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'privateLinkServiceConnectionName'), format('{0}-{1}-{2}', last(split(resourceId('Microsoft.ApiManagement/service', parameters('name')), '/')), coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'service'), 'service'), copyIndex())), 'properties', createObject('privateLinkServiceId', resourceId('Microsoft.ApiManagement/service', parameters('name')), 'groupIds', createArray(coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'service'), 'service')))))), createObject('value', null()))]",
+          "manualPrivateLinkServiceConnections": "[if(equals(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'isManualConnection'), true()), createObject('value', createArray(createObject('name', coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'privateLinkServiceConnectionName'), format('{0}-{1}-{2}', last(split(resourceId('Microsoft.ApiManagement/service', parameters('name')), '/')), coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'service'), 'service'), copyIndex())), 'properties', createObject('privateLinkServiceId', resourceId('Microsoft.ApiManagement/service', parameters('name')), 'groupIds', createArray(coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'service'), 'service')), 'requestMessage', coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'manualConnectionRequestMessage'), 'Manual approval required.'))))), createObject('value', null()))]",
           "subnetResourceId": {
-            "value": "[coalesce(parameters('privateEndpoints'), createArray())[copyIndex()].subnetResourceId]"
+            "value": "[if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()].subnetResourceId]"
           },
           "enableTelemetry": {
             "value": "[variables('enableReferencedModulesTelemetry')]"
           },
           "location": {
-            "value": "[coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'location'), reference(split(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()].subnetResourceId, '/subnets/')[0], '2020-06-01', 'Full').location)]"
+            "value": "[coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'location'), reference(split(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()].subnetResourceId, '/subnets/')[0], '2020-06-01', 'Full').location)]"
           },
           "lock": {
-            "value": "[coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'lock'), parameters('lock'))]"
+            "value": "[coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'lock'), parameters('lock'))]"
           },
           "privateDnsZoneGroup": {
-            "value": "[tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'privateDnsZoneGroup')]"
+            "value": "[tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'privateDnsZoneGroup')]"
           },
           "roleAssignments": {
-            "value": "[tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'roleAssignments')]"
+            "value": "[tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'roleAssignments')]"
           },
           "tags": {
-            "value": "[coalesce(tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'tags'), parameters('tags'))]"
+            "value": "[coalesce(tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'tags'), parameters('tags'))]"
           },
           "customDnsConfigs": {
-            "value": "[tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'customDnsConfigs')]"
+            "value": "[tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'customDnsConfigs')]"
           },
           "ipConfigurations": {
-            "value": "[tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'ipConfigurations')]"
+            "value": "[tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'ipConfigurations')]"
           },
           "applicationSecurityGroupResourceIds": {
-            "value": "[tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'applicationSecurityGroupResourceIds')]"
+            "value": "[tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'applicationSecurityGroupResourceIds')]"
           },
           "customNetworkInterfaceName": {
-            "value": "[tryGet(coalesce(parameters('privateEndpoints'), createArray())[copyIndex()], 'customNetworkInterfaceName')]"
+            "value": "[tryGet(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray())[copyIndex()], 'customNetworkInterfaceName')]"
           }
         },
         "template": {
@@ -6820,6 +6880,20 @@
       },
       "value": "[reference('service', '2024-05-01', 'full').location]"
     },
+    "configurationValid": {
+      "type": "bool",
+      "metadata": {
+        "description": "The configuration validation status."
+      },
+      "value": "[variables('validationPassed')]"
+    },
+    "configurationErrorMessage": {
+      "type": "string",
+      "metadata": {
+        "description": "Configuration error message (if any)."
+      },
+      "value": "[if(variables('validationPassed'), '', variables('configurationError'))]"
+    },
     "privateEndpoints": {
       "type": "array",
       "items": {
@@ -6829,7 +6903,7 @@
         "description": "The private endpoints of the API management service."
       },
       "copy": {
-        "count": "[length(coalesce(parameters('privateEndpoints'), createArray()))]",
+        "count": "[length(if(variables('validationPassed'), coalesce(parameters('privateEndpoints'), createArray()), createArray()))]",
         "input": {
           "name": "[reference(format('service_privateEndpoints[{0}]', copyIndex())).outputs.name.value]",
           "resourceId": "[reference(format('service_privateEndpoints[{0}]', copyIndex())).outputs.resourceId.value]",

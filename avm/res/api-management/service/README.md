@@ -1969,17 +1969,17 @@ param tags = {
 | [`notificationSenderEmail`](#parameter-notificationsenderemail) | string | The notification sender email address for the service. |
 | [`policies`](#parameter-policies) | array | Policies. |
 | [`portalsettings`](#parameter-portalsettings) | array | Portal settings. |
-| [`privateEndpoints`](#parameter-privateendpoints) | array | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the 'sku' to be 'Premium', 'Developer', 'Basic', 'Standard', 'StandardV2', or 'BasicV2'. |
+| [`privateEndpoints`](#parameter-privateendpoints) | array | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints. |
 | [`products`](#parameter-products) | array | Products. |
-| [`publicIpAddressResourceId`](#parameter-publicipaddressresourceid) | string | Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKU being deployed in Virtual Network. |
+| [`publicIpAddressResourceId`](#parameter-publicipaddressresourceid) | string | Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKUs when deployed in Virtual Network. |
 | [`publicNetworkAccess`](#parameter-publicnetworkaccess) | string | Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set. |
 | [`restore`](#parameter-restore) | bool | Undelete API Management Service if it was previously soft-deleted. If this flag is specified and set to True all other properties will be ignored. |
 | [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
 | [`sku`](#parameter-sku) | string | The pricing tier of this API Management service. |
-| [`subnetResourceId`](#parameter-subnetresourceid) | string | The full resource ID of a subnet in a virtual network to deploy the API Management service in. |
+| [`subnetResourceId`](#parameter-subnetresourceid) | string | The full resource ID of a subnet in a virtual network to deploy the API Management service in. VNet injection is supported with Developer, Premium, and StandardV2 SKUs only. |
 | [`subscriptions`](#parameter-subscriptions) | array | Subscriptions. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
-| [`virtualNetworkType`](#parameter-virtualnetworktype) | string | The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. |
+| [`virtualNetworkType`](#parameter-virtualnetworktype) | string | The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. VNet injection (External/Internal) is supported with Developer, Premium, and StandardV2 SKUs only. |
 
 ### Parameter: `name`
 
@@ -3320,7 +3320,7 @@ Portal settings.
 
 ### Parameter: `privateEndpoints`
 
-Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the 'sku' to be 'Premium', 'Developer', 'Basic', 'Standard', 'StandardV2', or 'BasicV2'.
+Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints.
 
 - Required: No
 - Type: array
@@ -3738,7 +3738,7 @@ Products.
 
 ### Parameter: `publicIpAddressResourceId`
 
-Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKU being deployed in Virtual Network.
+Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKUs when deployed in Virtual Network.
 
 - Required: No
 - Type: string
@@ -3894,7 +3894,7 @@ The pricing tier of this API Management service.
 
 ### Parameter: `subnetResourceId`
 
-The full resource ID of a subnet in a virtual network to deploy the API Management service in.
+The full resource ID of a subnet in a virtual network to deploy the API Management service in. VNet injection is supported with Developer, Premium, and StandardV2 SKUs only.
 
 - Required: No
 - Type: string
@@ -3915,7 +3915,7 @@ Tags of the resource.
 
 ### Parameter: `virtualNetworkType`
 
-The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only.
+The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. VNet injection (External/Internal) is supported with Developer, Premium, and StandardV2 SKUs only.
 
 - Required: No
 - Type: string
@@ -3933,6 +3933,8 @@ The type of VPN in which API Management service needs to be configured in. None 
 
 | Output | Type | Description |
 | :-- | :-- | :-- |
+| `configurationErrorMessage` | string | Configuration error message (if any). |
+| `configurationValid` | bool | The configuration validation status. |
 | `location` | string | The location the resource was deployed into. |
 | `name` | string | The name of the API management service. |
 | `privateEndpoints` | array | The private endpoints of the API management service. |
