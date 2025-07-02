@@ -124,12 +124,6 @@ A terms of service text.
 
 - Required: Yes
 - Type: string
-- Allowed:
-  ```Bicep
-  [
-    'string'
-  ]
-  ```
 
 ### Parameter: `properties.url`
 

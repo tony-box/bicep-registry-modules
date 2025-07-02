@@ -115,28 +115,28 @@ Authorization header authentication.
 
 List of Client Certificate Thumbprints. Will be ignored if certificatesIds are provided.
 
-- Required: Yes
+- Required: No
 - Type: array
 
 ### Parameter: `credentials.certificateIds`
 
 List of Client Certificate Ids.
 
-- Required: Yes
+- Required: No
 - Type: array
 
 ### Parameter: `credentials.header`
 
 Header Parameter description.
 
-- Required: Yes
+- Required: No
 - Type: object
 
 ### Parameter: `credentials.query`
 
 Query Parameter description.
 
-- Required: Yes
+- Required: No
 - Type: object
 
 ### Parameter: `description`
@@ -200,38 +200,20 @@ WebProxy Server AbsoluteUri property which includes the entire URI stored in the
 
 - Required: Yes
 - Type: string
-- Allowed:
-  ```Bicep
-  [
-    'string'
-  ]
-  ```
 
 ### Parameter: `proxy.password`
 
 Password to connect to the WebProxy Server.
 
-- Required: Yes
+- Required: No
 - Type: securestring
-- Allowed:
-  ```Bicep
-  [
-    'string'
-  ]
-  ```
 
 ### Parameter: `proxy.username`
 
 Username to connect to the WebProxy server.
 
-- Required: Yes
+- Required: No
 - Type: string
-- Allowed:
-  ```Bicep
-  [
-    'string'
-  ]
-  ```
 
 ### Parameter: `resourceId`
 
@@ -274,28 +256,28 @@ The cluster management endpoint.
 
 The client certificate id for the management endpoint.
 
-- Required: Yes
+- Required: No
 - Type: string
 
 ### Parameter: `serviceFabricCluster.clientCertificatethumbprint`
 
 The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided
 
-- Required: Yes
+- Required: No
 - Type: string
 
 ### Parameter: `serviceFabricCluster.maxPartitionResolutionRetries`
 
 Maximum number of retries while attempting resolve the partition.
 
-- Required: Yes
+- Required: No
 - Type: int
 
 ### Parameter: `serviceFabricCluster.serverCertificateThumbprints`
 
 Thumbprints of certificates cluster management service uses for tls communication
 
-- Required: Yes
+- Required: No
 - Type: array
 
 ### Parameter: `serviceFabricCluster.serverX509Names`
@@ -337,14 +319,14 @@ Backend TLS Properties.
 
 Flag indicating whether SSL certificate chain validation should be done when using self-signed certificates for this backend host.
 
-- Required: Yes
+- Required: No
 - Type: bool
 
 ### Parameter: `tls.validateCertificateName`
 
 Flag indicating whether SSL certificate name validation should be done when using self-signed certificates for this backend host.
 
-- Required: Yes
+- Required: No
 - Type: bool
 
 ### Parameter: `type`

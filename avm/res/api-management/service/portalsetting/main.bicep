@@ -49,7 +49,7 @@ type portalSettingPropertiesType = {
     @sys.description('Required. Display terms of service during a sign-up process.')
     enabled: bool
     @sys.description('Required. A terms of service text.')
-    text: 'string'
+    text: string
   }
 
   @sys.description('Conditional. Required if \'name\' is \'delegation\'. Subscriptions delegation settings.')

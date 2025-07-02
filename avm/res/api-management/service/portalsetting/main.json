@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "16244598603916053118"
+      "templateHash": "17432954865823380611"
     },
     "name": "API Management Service Portal Settings",
     "description": "This module deploys an API Management Service Portal Setting."
@@ -38,9 +38,6 @@
             },
             "text": {
               "type": "string",
-              "allowedValues": [
-                "string"
-              ],
               "metadata": {
                 "description": "Required. A terms of service text."
               }

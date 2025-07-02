@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "17034543256331928639"
+      "templateHash": "1025425232649318274"
     },
     "name": "API Management Services",
     "description": "This module deploys an API Management Service. The default deployment is set to use a Premium SKU to align with Microsoft WAF-aligned best practices. In most cases, non-prod deployments should use a lower-tier SKU."
@@ -3903,7 +3903,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "3605548400890358528"
+              "templateHash": "4397683497063159689"
             },
             "name": "API Management Service Backends",
             "description": "This module deploys an API Management Service Backend."
@@ -3927,6 +3927,7 @@
                   "items": {
                     "type": "string"
                   },
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. List of Client Certificate Thumbprints. Will be ignored if certificatesIds are provided."
                   }
@@ -3936,18 +3937,21 @@
                   "items": {
                     "type": "string"
                   },
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. List of Client Certificate Ids."
                   }
                 },
                 "header": {
                   "type": "object",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Header Parameter description."
                   }
                 },
                 "query": {
                   "type": "object",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Query Parameter description."
                   }
@@ -3959,18 +3963,13 @@
               "properties": {
                 "password": {
                   "type": "securestring",
-                  "allowedValues": [
-                    "string"
-                  ],
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Password to connect to the WebProxy Server."
                   }
                 },
                 "url": {
                   "type": "string",
-                  "allowedValues": [
-                    "string"
-                  ],
                   "minLength": 1,
                   "maxLength": 2000,
                   "metadata": {
@@ -3979,9 +3978,7 @@
                 },
                 "username": {
                   "type": "string",
-                  "allowedValues": [
-                    "string"
-                  ],
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Username to connect to the WebProxy server."
                   }
@@ -3993,12 +3990,14 @@
               "properties": {
                 "clientCertificateId": {
                   "type": "string",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. The client certificate id for the management endpoint."
                   }
                 },
                 "clientCertificatethumbprint": {
                   "type": "string",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided"
                   }
@@ -4014,6 +4013,7 @@
                 },
                 "maxPartitionResolutionRetries": {
                   "type": "int",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Maximum number of retries while attempting resolve the partition."
                   }
@@ -4023,6 +4023,7 @@
                   "items": {
                     "type": "string"
                   },
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Thumbprints of certificates cluster management service uses for tls communication"
                   }
@@ -4044,12 +4045,14 @@
               "properties": {
                 "validateCertificateChain": {
                   "type": "bool",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Flag indicating whether SSL certificate chain validation should be done when using self-signed certificates for this backend host."
                   }
                 },
                 "validateCertificateName": {
                   "type": "bool",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Flag indicating whether SSL certificate name validation should be done when using self-signed certificates for this backend host."
                   }
@@ -5051,7 +5054,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "9483203334608330250"
+              "templateHash": "5124225151632009433"
             },
             "name": "API Management Service Named Values",
             "description": "This module deploys an API Management Service Named Value."
@@ -5062,12 +5065,14 @@
               "properties": {
                 "secretIdentifier": {
                   "type": "string",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Key vault secret identifier for fetching secret. Providing a versioned secret will prevent auto-refresh. This requires API Management service to be configured with aka.ms/apimmsi."
                   }
                 },
                 "identityClientId": {
                   "type": "string",
+                  "nullable": true,
                   "metadata": {
                     "description": "Optional. Null for SystemAssignedIdentity or Client Id for UserAssignedIdentity , which will be used to access key vault secret."
                   }
@@ -5208,7 +5213,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "16244598603916053118"
+              "templateHash": "17432954865823380611"
             },
             "name": "API Management Service Portal Settings",
             "description": "This module deploys an API Management Service Portal Setting."
@@ -5240,9 +5245,6 @@
                     },
                     "text": {
                       "type": "string",
-                      "allowedValues": [
-                        "string"
-                      ],
                       "metadata": {
                         "description": "Required. A terms of service text."
                       }
