@@ -80,13 +80,13 @@ param sku string = 'Premium'
 @description('Conditional. The scale units for this API Management service. Required if using Basic, Standard, or Premium skus. For range of capacities for each sku, reference https://azure.microsoft.com/en-us/pricing/details/api-management/.')
 param skuCapacity int = 3
 
-@description('Optional. The full resource ID of a subnet in a virtual network to deploy the API Management service in.')
+@description('Optional. The full resource ID of a subnet in a virtual network to deploy the API Management service in. VNet injection is supported with Developer, Premium, and StandardV2 SKUs only.')
 param subnetResourceId string?
 
 @description('Optional. Tags of the resource.')
 param tags resourceInput<'Microsoft.ApiManagement/service@2024-05-01'>.tags?
 
-@description('Optional. The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only.')
+@description('Optional. The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. VNet injection (External/Internal) is supported with Developer, Premium, and StandardV2 SKUs only.')
 @allowed([
   'None'
   'External'
@@ -147,7 +147,7 @@ param policies array?
 param portalsettings array?
 
 import { privateEndpointSingleServiceType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
-@sys.description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the \'sku\' to be \'Premium\', \'Developer\', \'Basic\', \'Standard\', \'StandardV2\', or \'BasicV2\'.')
+@sys.description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints.')
 param privateEndpoints privateEndpointSingleServiceType[]?
 
 @description('Optional. Products.')
@@ -163,11 +163,105 @@ param publicNetworkAccess string?
 @description('Optional. Subscriptions.')
 param subscriptions array?
 
-@description('Optional. Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKU being deployed in Virtual Network.')
+@description('Optional. Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKUs when deployed in Virtual Network.')
 param publicIpAddressResourceId string?
 
 @description('Optional. Enable the Developer Portal. The developer portal is not supported on the Consumption SKU.')
 param enableDeveloperPortal bool = false
+
+// =============== //
+//   Validations   //
+// =============== //
+
+// Define SKU capabilities for validation
+var skuCapabilities = {
+  Consumption: {
+    supportsPrivateEndpoints: false
+    supportsVNetInjection: false
+    supportsPublicIpAddress: false
+    supportsAdditionalLocations: false
+  }
+  Developer: {
+    supportsPrivateEndpoints: true
+    supportsVNetInjection: true
+    supportsPublicIpAddress: true
+    supportsAdditionalLocations: false
+  }
+  Basic: {
+    supportsPrivateEndpoints: true
+    supportsVNetInjection: false
+    supportsPublicIpAddress: false
+    supportsAdditionalLocations: false
+  }
+  Standard: {
+    supportsPrivateEndpoints: true
+    supportsVNetInjection: false
+    supportsPublicIpAddress: false
+    supportsAdditionalLocations: false
+  }
+  Premium: {
+    supportsPrivateEndpoints: true
+    supportsVNetInjection: true
+    supportsPublicIpAddress: true
+    supportsAdditionalLocations: true
+  }
+  BasicV2: {
+    supportsPrivateEndpoints: true
+    supportsVNetInjection: false
+    supportsPublicIpAddress: false
+    supportsAdditionalLocations: false
+  }
+  StandardV2: {
+    supportsPrivateEndpoints: true
+    supportsVNetInjection: true // Outbound integration only
+    supportsPublicIpAddress: false
+    supportsAdditionalLocations: false
+  }
+}
+
+// Validation: Private endpoints are only supported on specific SKUs
+var privateEndpointsRequested = !empty(privateEndpoints)
+var privateEndpointsSupportedForSku = skuCapabilities[sku].supportsPrivateEndpoints
+
+// Validation: VNet injection is only supported on specific SKUs
+var vnetInjectionRequested = virtualNetworkType != 'None' || !empty(subnetResourceId)
+var vnetInjectionSupportedForSku = skuCapabilities[sku].supportsVNetInjection
+
+// Validation: Public IP address is only supported on specific SKUs
+var publicIpRequested = !empty(publicIpAddressResourceId)
+var publicIpSupportedForSku = skuCapabilities[sku].supportsPublicIpAddress
+
+// Validation: Additional locations are only supported on Premium SKU
+var additionalLocationsRequested = !empty(additionalLocations)
+var additionalLocationsSupportedForSku = skuCapabilities[sku].supportsAdditionalLocations
+
+// Validation: Internal VNet mode requires VNet injection support
+var internalVNetRequested = virtualNetworkType == 'Internal'
+
+// Validation logic - these will cause deployment to fail with clear messages if conditions are violated
+var privateEndpointsAllowed = !privateEndpointsRequested || privateEndpointsSupportedForSku
+var vnetInjectionAllowed = !vnetInjectionRequested || vnetInjectionSupportedForSku
+var publicIpAllowed = !publicIpRequested || (publicIpSupportedForSku && vnetInjectionRequested)
+var additionalLocationsAllowed = !additionalLocationsRequested || additionalLocationsSupportedForSku
+var internalVNetAllowed = !internalVNetRequested || vnetInjectionSupportedForSku
+
+// Error messages for invalid configurations
+var configurationError = !privateEndpointsAllowed
+  ? 'Private endpoints are not supported with the ${sku} SKU. Supported SKUs: Developer, Basic, Standard, Premium, BasicV2, StandardV2.'
+  : !vnetInjectionAllowed
+      ? 'Virtual network injection is not supported with the ${sku} SKU. Supported SKUs for VNet injection: Developer, Premium, StandardV2.'
+      : !publicIpAllowed && publicIpRequested && !vnetInjectionRequested
+          ? 'Public IP address can only be assigned when deploying to a virtual network (set virtualNetworkType or provide subnetResourceId).'
+          : !publicIpAllowed
+              ? 'Public IP address assignment is not supported with the ${sku} SKU. Supported SKUs: Developer, Premium (when deployed in VNet).'
+              : !additionalLocationsAllowed
+                  ? 'Additional locations are only supported with the Premium SKU.'
+                  : !internalVNetAllowed
+                      ? 'Internal virtual network mode is not supported with the ${sku} SKU. Supported SKUs: Developer, Premium, StandardV2.'
+                      : ''
+
+// This will cause the deployment to fail with a clear error message if any validation fails
+var validationPassed = privateEndpointsAllowed && vnetInjectionAllowed && publicIpAllowed && additionalLocationsAllowed && internalVNetAllowed
 
 var enableReferencedModulesTelemetry = false
 
@@ -261,7 +355,7 @@ resource service 'Microsoft.ApiManagement/service@2024-05-01' = {
     publisherName: publisherName
     notificationSenderEmail: notificationSenderEmail
     hostnameConfigurations: hostnameConfigurations
-    additionalLocations: contains(sku, 'Premium') && !empty(additionalLocations)
+    additionalLocations: validationPassed && contains(sku, 'Premium') && !empty(additionalLocations)
       ? map((additionalLocations ?? []), additLoc => {
           location: additLoc.location
           sku: additLoc.sku
@@ -271,21 +365,23 @@ resource service 'Microsoft.ApiManagement/service@2024-05-01' = {
           virtualNetworkConfiguration: additLoc.?virtualNetworkConfiguration
           zones: map(additLoc.?availabilityZones ?? [], zone => string(zone))
         })
-      : []
+      : !validationPassed && !empty(additionalLocations) ? json('null /* ${configurationError} */') : []
     customProperties: contains(sku, 'Consumption') ? null : customProperties
     certificates: certificates
     enableClientCertificate: enableClientCertificate ? true : null
     disableGateway: disableGateway
-    virtualNetworkType: virtualNetworkType
-    virtualNetworkConfiguration: !empty(subnetResourceId)
+    virtualNetworkType: validationPassed ? virtualNetworkType : 'None' // Force to None if validation fails
+    virtualNetworkConfiguration: validationPassed && !empty(subnetResourceId)
       ? {
           subnetResourceId: subnetResourceId
         }
-      : null
-    publicIpAddressId: publicIpAddressResourceId
+      : !validationPassed && !empty(subnetResourceId) ? json('null /* ${configurationError} */') : null
+    publicIpAddressId: validationPassed
+      ? publicIpAddressResourceId
+      : (!empty(publicIpAddressResourceId) ? json('null /* ${configurationError} */') : null)
     publicNetworkAccess: !empty(publicNetworkAccess)
       ? publicNetworkAccess
-      : (!empty(privateEndpoints) ? 'Disabled' : 'Enabled')
+      : (validationPassed && !empty(privateEndpoints) && !empty(subnetResourceId) ? 'Disabled' : 'Enabled')
     apiVersionConstraint: !empty(minApiVersion)
       ? {
           minApiVersion: minApiVersion
@@ -603,7 +699,7 @@ resource service_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-0
 ]
 
 module service_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11.0' = [
-  for (privateEndpoint, index) in (privateEndpoints ?? []): {
+  for (privateEndpoint, index) in (validationPassed ? (privateEndpoints ?? []) : []): {
     name: '${uniqueString(deployment().name, location)}-service-PrivateEndpoint-${index}'
     scope: resourceGroup(
       split(privateEndpoint.?resourceGroupResourceId ?? resourceGroup().id, '/')[2],
@@ -672,9 +768,15 @@ output systemAssignedMIPrincipalId string? = service.?identity.?principalId
 @description('The location the resource was deployed into.')
 output location string = service.location
 
+@description('The configuration validation status.')
+output configurationValid bool = validationPassed
+
+@description('Configuration error message (if any).')
+output configurationErrorMessage string = validationPassed ? '' : configurationError
+
 @description('The private endpoints of the API management service.')
 output privateEndpoints privateEndpointOutputType[] = [
-  for (pe, index) in (privateEndpoints ?? []): {
+  for (pe, index) in (validationPassed ? (privateEndpoints ?? []) : []): {
     name: service_privateEndpoints[index].outputs.name
     resourceId: service_privateEndpoints[index].outputs.resourceId
     groupId: service_privateEndpoints[index].outputs.?groupId!
