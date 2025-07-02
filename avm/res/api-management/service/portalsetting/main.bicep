@@ -1,7 +1,7 @@
 metadata name = 'API Management Service Portal Settings'
 metadata description = 'This module deploys an API Management Service Portal Setting.'
 
-@description('Conditional. The name of the parent API Management service. Required if the template is used in a standalone deployment.')
+@description('Conditional. Required if the template is used in a standalone deployment. The name of the parent API Management service.')
 param apiManagementServiceName string
 
 @description('Required. Portal setting name.')
@@ -42,7 +42,7 @@ type portalSettingPropertiesType = {
   @sys.description('Conditional. Required if \'name\' is \'signin\' or \'signup\'. \'signin\': Redirect Anonymous users to the Sign-In page. \'signup\': Allow users to sign up on a developer portal.')
   enabled: bool
 
-  @sys.description('Conditional. if \'name\' is \'signup\'.')
+  @sys.description('Conditional. Required if \'name\' is \'signup\'.')
   termsOfService: {
     @sys.description('Required. Ask user for consent to the terms of service.')
     consentRequired: bool

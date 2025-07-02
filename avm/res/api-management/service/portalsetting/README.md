@@ -27,7 +27,7 @@ This module deploys an API Management Service Portal Setting.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`apiManagementServiceName`](#parameter-apimanagementservicename) | string | The name of the parent API Management service. Required if the template is used in a standalone deployment. |
+| [`apiManagementServiceName`](#parameter-apimanagementservicename) | string | Required if the template is used in a standalone deployment. The name of the parent API Management service. |
 
 ### Parameter: `name`
 
@@ -57,7 +57,7 @@ Portal setting properties.
 | :-- | :-- | :-- |
 | [`enabled`](#parameter-propertiesenabled) | bool | Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal. |
 | [`subscriptions`](#parameter-propertiessubscriptions) | object | Required if 'name' is 'delegation'. Subscriptions delegation settings. |
-| [`termsOfService`](#parameter-propertiestermsofservice) | object | if 'name' is 'signup'. |
+| [`termsOfService`](#parameter-propertiestermsofservice) | object | Required if 'name' is 'signup'. |
 | [`url`](#parameter-propertiesurl) | string | Required if 'name' is 'delegation'. A delegation Url. |
 | [`userRegistration`](#parameter-propertiesuserregistration) | object | Required if 'name' is 'delegation'. User registration delegation settings. |
 | [`validationKey`](#parameter-propertiesvalidationkey) | securestring | Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management. |
@@ -91,7 +91,7 @@ Enable or disable delegation for subscriptions.
 
 ### Parameter: `properties.termsOfService`
 
-if 'name' is 'signup'.
+Required if 'name' is 'signup'.
 
 - Required: Yes
 - Type: object
@@ -161,7 +161,7 @@ Required if 'name' is 'delegation'. A base64-encoded validation key to validate,
 
 ### Parameter: `apiManagementServiceName`
 
-The name of the parent API Management service. Required if the template is used in a standalone deployment.
+Required if the template is used in a standalone deployment. The name of the parent API Management service.
 
 - Required: Yes
 - Type: string
