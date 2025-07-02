@@ -61,6 +61,8 @@ type PortalSettingProperties = {
 
   @sys.description('Conditional. Required for "delegation". A delegation Url.')
   url: string
+
+  @sys.description('Conditional. Required for "delegation". User registration delegation settings.')
   userRegistration: {
     @sys.description('Required. Enable or disable delegation for user registration.')
     enabled: bool

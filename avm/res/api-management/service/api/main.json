@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.35.1.17967",
-      "templateHash": "15594091729270943816"
+      "version": "0.36.1.42791",
+      "templateHash": "1318274451678203270"
     },
     "name": "API Management Service APIs",
     "description": "This module deploys an API Management Service API."
@@ -569,8 +569,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.35.1.17967",
-              "templateHash": "17954633540696938037"
+              "version": "0.36.1.42791",
+              "templateHash": "12348654181806631631"
             },
             "name": "API Management Service APIs Policies",
             "description": "This module deploys an API Management Service API Policy."
@@ -716,8 +716,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.35.1.17967",
-              "templateHash": "7258995271080005683"
+              "version": "0.36.1.42791",
+              "templateHash": "6609159876177312108"
             },
             "name": "API Management Service APIs Diagnostics.",
             "description": "This module deploys an API Management Service API Diagnostics."
@@ -961,8 +961,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.35.1.17967",
-              "templateHash": "6629339591821662719"
+              "version": "0.36.1.42791",
+              "templateHash": "11892051320650079986"
             },
             "name": "API Management Service APIs Operations",
             "description": "This module deploys an API Management Service API Operation."
@@ -1091,13 +1091,13 @@
             "service::api": {
               "existing": true,
               "type": "Microsoft.ApiManagement/service/apis",
-              "apiVersion": "2022-08-01",
+              "apiVersion": "2024-05-01",
               "name": "[format('{0}/{1}', parameters('apiManagementServiceName'), parameters('apiName'))]"
             },
             "service": {
               "existing": true,
               "type": "Microsoft.ApiManagement/service",
-              "apiVersion": "2023-05-01-preview",
+              "apiVersion": "2024-05-01",
               "name": "[parameters('apiManagementServiceName')]"
             },
             "operation": {
@@ -1153,8 +1153,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.35.1.17967",
-                      "templateHash": "15561539799762283135"
+                      "version": "0.36.1.42791",
+                      "templateHash": "18191180774129018308"
                     },
                     "name": "API Management Service API Operation Policies",
                     "description": "This module deploys an API Management Service API Operation Policy."
@@ -1206,7 +1206,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.ApiManagement/service/apis/operations/policies",
-                      "apiVersion": "2022-08-01",
+                      "apiVersion": "2024-05-01",
                       "name": "[format('{0}/{1}/{2}/{3}', parameters('apiManagementServiceName'), parameters('apiName'), parameters('operationName'), parameters('name'))]",
                       "properties": {
                         "value": "[parameters('value')]",
