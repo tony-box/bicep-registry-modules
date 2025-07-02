@@ -67,6 +67,27 @@ KeyVault location details of the namedValue.
 - Required: No
 - Type: object
 
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`identityClientId`](#parameter-keyvaultidentityclientid) | string | Null for SystemAssignedIdentity or Client Id for UserAssignedIdentity , which will be used to access key vault secret. |
+| [`secretIdentifier`](#parameter-keyvaultsecretidentifier) | string | Key vault secret identifier for fetching secret. Providing a versioned secret will prevent auto-refresh. This requires API Management service to be configured with aka.ms/apimmsi. |
+
+### Parameter: `keyVault.identityClientId`
+
+Null for SystemAssignedIdentity or Client Id for UserAssignedIdentity , which will be used to access key vault secret.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `keyVault.secretIdentifier`
+
+Key vault secret identifier for fetching secret. Providing a versioned secret will prevent auto-refresh. This requires API Management service to be configured with aka.ms/apimmsi.
+
+- Required: Yes
+- Type: string
+
 ### Parameter: `secret`
 
 Determines whether the value is a secret and should be encrypted or not. Default value is false.

@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "3333367630486312395"
+      "templateHash": "1440930855302944012"
     },
     "name": "API Management Service Portal Settings",
     "description": "This module deploys an API Management Service Portal Setting."
@@ -79,6 +79,9 @@
                 "description": "Required. Enable or disable delegation for user registration."
               }
             }
+          },
+          "metadata": {
+            "description": "Conditional. Required for \"delegation\". User registration delegation settings."
           }
         },
         "validationKey": {
