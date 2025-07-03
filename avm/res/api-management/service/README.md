@@ -444,6 +444,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           termsOfService: {
             consentRequired: false
             enabled: false
+            text: 'Test TOS.'
           }
         }
       }
@@ -735,7 +736,8 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
             "enabled": false,
             "termsOfService": {
               "consentRequired": false,
-              "enabled": false
+              "enabled": false,
+              "text": "Test TOS."
             }
           }
         }
@@ -1006,6 +1008,7 @@ param portalsettings = [
       termsOfService: {
         consentRequired: false
         enabled: false
+        text: 'Test TOS.'
       }
     }
   }
@@ -1342,7 +1345,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           termsOfService: {
             consentRequired: false
             enabled: false
-            text: 'By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes.'
+            text: 'Test TOS.'
           }
         }
       }
@@ -1613,7 +1616,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
             "termsOfService": {
               "consentRequired": false,
               "enabled": false,
-              "text": "By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes."
+              "text": "Test TOS."
             }
           }
         }
@@ -1856,7 +1859,7 @@ param portalsettings = [
       termsOfService: {
         consentRequired: false
         enabled: false
-        text: 'By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes.'
+        text: 'Test TOS.'
       }
     }
   }

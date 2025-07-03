@@ -21,7 +21,7 @@ param locationRegion2 string = 'westus'
 param serviceShort string = 'apismax'
 
 @description('Optional. A token to inject into the name of each resource.')
-param namePrefix string = '#_namePrefix_#'
+param namePrefix string = 'apim02'
 
 @description('Optional. The secret to leverage for authorization server authentication.')
 @secure()
@@ -225,6 +225,7 @@ module testDeployment '../../../main.bicep' = [
           properties: {
             enabled: false
             termsOfService: {
+              text: 'Test TOS.'
               consentRequired: false
               enabled: false
             }
