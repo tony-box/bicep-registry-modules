@@ -21,7 +21,7 @@ param locationRegion2 string = 'westus'
 param serviceShort string = 'apismax'
 
 @description('Optional. A token to inject into the name of each resource.')
-param namePrefix string = 'apim02'
+param namePrefix string = '#_namePrefix_#'
 
 @description('Optional. The secret to leverage for authorization server authentication.')
 @secure()
@@ -94,7 +94,7 @@ module testDeployment '../../../main.bicep' = [
           }
         }
       ]
-      virtualNetworkType: 'Internal'
+      virtualNetworkType: 'External' // Must be external for initial setup of Private Endpoints
       subnetResourceId: nestedDependencies.outputs.subnetResourceIdRegion1
       publicIpAddressResourceId: nestedDependencies.outputs.publicIPResourceIdRegion1
       apis: [
@@ -218,17 +218,6 @@ module testDeployment '../../../main.bicep' = [
           name: 'signin'
           properties: {
             enabled: false
-          }
-        }
-        {
-          name: 'signup'
-          properties: {
-            enabled: false
-            termsOfService: {
-              text: 'Test TOS.'
-              consentRequired: false
-              enabled: false
-            }
           }
         }
       ]

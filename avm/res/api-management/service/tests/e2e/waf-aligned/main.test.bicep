@@ -222,17 +222,6 @@ module testDeployment '../../../main.bicep' = [
             enabled: false
           }
         }
-        {
-          name: 'signup'
-          properties: {
-            enabled: false
-            termsOfService: {
-              text: 'Test TOS.'
-              consentRequired: false
-              enabled: false
-            }
-          }
-        }
       ]
       privateEndpoints: [
         {
