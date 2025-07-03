@@ -1342,6 +1342,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           termsOfService: {
             consentRequired: false
             enabled: false
+            text: 'By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes.'
           }
         }
       }
@@ -1611,7 +1612,8 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
             "enabled": false,
             "termsOfService": {
               "consentRequired": false,
-              "enabled": false
+              "enabled": false,
+              "text": "By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes."
             }
           }
         }
@@ -1854,6 +1856,7 @@ param portalsettings = [
       termsOfService: {
         consentRequired: false
         enabled: false
+        text: 'By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes.'
       }
     }
   }
@@ -1972,7 +1975,7 @@ param tags = {
 | [`privateEndpoints`](#parameter-privateendpoints) | array | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints. |
 | [`products`](#parameter-products) | array | Products. |
 | [`publicIpAddressResourceId`](#parameter-publicipaddressresourceid) | string | Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKUs when deployed in Virtual Network. |
-| [`publicNetworkAccess`](#parameter-publicnetworkaccess) | string | Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set. |
+| [`publicNetworkAccess`](#parameter-publicnetworkaccess) | string | Whether or not public network access is allowed for this resource. For security reasons it should be disabled. Note: Cannot be set to "Disabled" during initial service creation - must be changed post-deployment. If not specified, defaults to "Enabled". |
 | [`restore`](#parameter-restore) | bool | Undelete API Management Service if it was previously soft-deleted. If this flag is specified and set to True all other properties will be ignored. |
 | [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
 | [`sku`](#parameter-sku) | string | The pricing tier of this API Management service. |
@@ -3745,7 +3748,7 @@ Public Standard SKU IP V4 based IP address to be associated with Virtual Network
 
 ### Parameter: `publicNetworkAccess`
 
-Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set.
+Whether or not public network access is allowed for this resource. For security reasons it should be disabled. Note: Cannot be set to "Disabled" during initial service creation - must be changed post-deployment. If not specified, defaults to "Enabled".
 
 - Required: No
 - Type: string

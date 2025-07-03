@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "8838008411625523299"
+      "templateHash": "11123419402267709909"
     },
     "name": "API Management Services",
     "description": "This module deploys an API Management Service. The default deployment is set to use a Premium SKU to align with Microsoft WAF-aligned best practices. In most cases, non-prod deployments should use a lower-tier SKU."
@@ -1818,7 +1818,7 @@
         "Disabled"
       ],
       "metadata": {
-        "description": "Optional. Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set."
+        "description": "Optional. Whether or not public network access is allowed for this resource. For security reasons it should be disabled. Note: Cannot be set to \"Disabled\" during initial service creation - must be changed post-deployment. If not specified, defaults to \"Enabled\"."
       }
     },
     "subscriptions": {
@@ -1972,7 +1972,7 @@
         "virtualNetworkType": "[if(variables('validationPassed'), parameters('virtualNetworkType'), 'None')]",
         "virtualNetworkConfiguration": "[if(and(variables('validationPassed'), not(empty(parameters('subnetResourceId')))), createObject('subnetResourceId', parameters('subnetResourceId')), if(and(not(variables('validationPassed')), not(empty(parameters('subnetResourceId')))), json(format('null /* {0} */', variables('configurationError'))), null()))]",
         "publicIpAddressId": "[if(variables('validationPassed'), parameters('publicIpAddressResourceId'), if(not(empty(parameters('publicIpAddressResourceId'))), json(format('null /* {0} */', variables('configurationError'))), null()))]",
-        "publicNetworkAccess": "[if(not(empty(parameters('publicNetworkAccess'))), parameters('publicNetworkAccess'), if(and(and(variables('validationPassed'), not(empty(parameters('privateEndpoints')))), not(empty(parameters('subnetResourceId')))), 'Disabled', 'Enabled'))]",
+        "publicNetworkAccess": "[if(not(empty(parameters('publicNetworkAccess'))), parameters('publicNetworkAccess'), 'Enabled')]",
         "apiVersionConstraint": "[if(not(empty(parameters('minApiVersion'))), createObject('minApiVersion', parameters('minApiVersion')), createObject('minApiVersion', '2021-08-01'))]",
         "restore": "[parameters('restore')]",
         "developerPortalStatus": "[if(not(equals(parameters('sku'), 'Consumption')), if(parameters('enableDeveloperPortal'), 'Enabled', 'Disabled'), null())]"

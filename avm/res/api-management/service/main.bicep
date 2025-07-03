@@ -153,7 +153,7 @@ param privateEndpoints privateEndpointSingleServiceType[]?
 @description('Optional. Products.')
 param products array?
 
-@description('Optional. Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set.')
+@description('Optional. Whether or not public network access is allowed for this resource. For security reasons it should be disabled. Note: Cannot be set to "Disabled" during initial service creation - must be changed post-deployment. If not specified, defaults to "Enabled".')
 @allowed([
   'Enabled'
   'Disabled'
@@ -379,9 +379,7 @@ resource service 'Microsoft.ApiManagement/service@2024-05-01' = {
     publicIpAddressId: validationPassed
       ? publicIpAddressResourceId
       : (!empty(publicIpAddressResourceId) ? json('null /* ${configurationError} */') : null)
-    publicNetworkAccess: !empty(publicNetworkAccess)
-      ? publicNetworkAccess
-      : (validationPassed && !empty(privateEndpoints) && !empty(subnetResourceId) ? 'Disabled' : 'Enabled')
+    publicNetworkAccess: !empty(publicNetworkAccess) ? publicNetworkAccess : 'Enabled'
     apiVersionConstraint: !empty(minApiVersion)
       ? {
           minApiVersion: minApiVersion
