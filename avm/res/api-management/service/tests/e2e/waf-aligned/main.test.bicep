@@ -227,6 +227,7 @@ module testDeployment '../../../main.bicep' = [
           properties: {
             enabled: false
             termsOfService: {
+              text: 'By accessing or using the services provided by Echo API through Azure API Management, you agree to be bound by these Terms of Use. These terms may be updated from time to time, and your continued use of the services constitutes acceptance of any changes.'
               consentRequired: false
               enabled: false
             }
