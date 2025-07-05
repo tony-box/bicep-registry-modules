@@ -225,6 +225,7 @@ module testDeployment '../../../main.bicep' = [
       ]
       privateEndpoints: [
         {
+          service: 'Gateway'
           subnetResourceId: nestedDependencies.outputs.privateEndpointSubnetResourceId
           privateDnsZoneGroup: {
             privateDnsZoneGroupConfigs: [
@@ -240,6 +241,7 @@ module testDeployment '../../../main.bicep' = [
           }
         }
         {
+          service: 'Gateway'
           subnetResourceId: nestedDependencies.outputs.privateEndpointSubnetResourceId
           privateDnsZoneGroup: {
             privateDnsZoneGroupConfigs: [
@@ -277,6 +279,7 @@ module testDeployment '../../../main.bicep' = [
           displayName: 'testArmSubscriptionAllApis'
         }
       ]
+      virtualNetworkType: 'None' // Required for private endpoints
       tags: {
         'hidden-title': 'This is visible in the resource name'
         Environment: 'Non-Prod'

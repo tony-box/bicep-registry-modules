@@ -53,8 +53,9 @@ The following section provides usage examples for the module, which were used to
 - [Using only defaults](#example-2-using-only-defaults)
 - [Deploying a Developer SKU](#example-3-deploying-a-developer-sku)
 - [Using large parameter set](#example-4-using-large-parameter-set)
-- [Deploying an APIM v2 sku](#example-5-deploying-an-apim-v2-sku)
-- [WAF-aligned](#example-6-waf-aligned)
+- [Using private endpoints](#example-5-using-private-endpoints)
+- [Deploying an APIM v2 sku](#example-6-deploying-an-apim-v2-sku)
+- [WAF-aligned](#example-7-waf-aligned)
 
 ### Example 1: _Deploying a Consumption SKU_
 
@@ -437,17 +438,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           enabled: false
         }
       }
-      {
-        name: 'signup'
-        properties: {
-          enabled: false
-          termsOfService: {
-            consentRequired: false
-            enabled: false
-            text: 'Test TOS.'
-          }
-        }
-      }
     ]
     privateEndpoints: [
       {
@@ -527,7 +517,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
       'hidden-title': 'This is visible in the resource name'
       Role: 'DeploymentValidation'
     }
-    virtualNetworkType: 'Internal'
   }
 }
 ```
@@ -729,17 +718,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           "properties": {
             "enabled": false
           }
-        },
-        {
-          "name": "signup",
-          "properties": {
-            "enabled": false,
-            "termsOfService": {
-              "consentRequired": false,
-              "enabled": false,
-              "text": "Test TOS."
-            }
-          }
         }
       ]
     },
@@ -834,9 +812,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         "hidden-title": "This is visible in the resource name",
         "Role": "DeploymentValidation"
       }
-    },
-    "virtualNetworkType": {
-      "value": "Internal"
     }
   }
 }
@@ -1001,17 +976,6 @@ param portalsettings = [
       enabled: false
     }
   }
-  {
-    name: 'signup'
-    properties: {
-      enabled: false
-      termsOfService: {
-        consentRequired: false
-        enabled: false
-        text: 'Test TOS.'
-      }
-    }
-  }
 ]
 param privateEndpoints = [
   {
@@ -1091,13 +1055,201 @@ param tags = {
   'hidden-title': 'This is visible in the resource name'
   Role: 'DeploymentValidation'
 }
-param virtualNetworkType = 'Internal'
 ```
 
 </details>
 <p>
 
-### Example 5: _Deploying an APIM v2 sku_
+### Example 5: _Using private endpoints_
+
+This instance deploys the module with private endpoints enabled.
+
+
+<details>
+
+<summary>via Bicep module</summary>
+
+```bicep
+module service 'br/public:avm/res/api-management/service:<version>' = {
+  name: 'serviceDeployment'
+  params: {
+    // Required parameters
+    name: 'apispe001'
+    publisherEmail: 'apimgmt-noreply@mail.windowsazure.com'
+    publisherName: 'az-amorg-x-001'
+    // Non-required parameters
+    diagnosticSettings: [
+      {
+        eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
+        eventHubName: '<eventHubName>'
+        storageAccountResourceId: '<storageAccountResourceId>'
+        workspaceResourceId: '<workspaceResourceId>'
+      }
+    ]
+    managedIdentities: {
+      systemAssigned: true
+    }
+    privateEndpoints: [
+      {
+        privateDnsZoneGroup: {
+          privateDnsZoneGroupConfigs: [
+            {
+              privateDnsZoneResourceId: '<privateDnsZoneResourceId>'
+            }
+          ]
+        }
+        service: 'Gateway'
+        subnetResourceId: '<subnetResourceId>'
+        tags: {
+          Environment: 'Non-Prod'
+          'hidden-title': 'This is visible in the resource name'
+          Role: 'DeploymentValidation'
+        }
+      }
+    ]
+    sku: 'StandardV2'
+    tags: {
+      Environment: 'Non-Prod'
+      'hidden-title': 'This is visible in the resource name'
+      Role: 'DeploymentValidation'
+    }
+    virtualNetworkType: 'None'
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via JSON parameters file</summary>
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    // Required parameters
+    "name": {
+      "value": "apispe001"
+    },
+    "publisherEmail": {
+      "value": "apimgmt-noreply@mail.windowsazure.com"
+    },
+    "publisherName": {
+      "value": "az-amorg-x-001"
+    },
+    // Non-required parameters
+    "diagnosticSettings": {
+      "value": [
+        {
+          "eventHubAuthorizationRuleResourceId": "<eventHubAuthorizationRuleResourceId>",
+          "eventHubName": "<eventHubName>",
+          "storageAccountResourceId": "<storageAccountResourceId>",
+          "workspaceResourceId": "<workspaceResourceId>"
+        }
+      ]
+    },
+    "managedIdentities": {
+      "value": {
+        "systemAssigned": true
+      }
+    },
+    "privateEndpoints": {
+      "value": [
+        {
+          "privateDnsZoneGroup": {
+            "privateDnsZoneGroupConfigs": [
+              {
+                "privateDnsZoneResourceId": "<privateDnsZoneResourceId>"
+              }
+            ]
+          },
+          "service": "Gateway",
+          "subnetResourceId": "<subnetResourceId>",
+          "tags": {
+            "Environment": "Non-Prod",
+            "hidden-title": "This is visible in the resource name",
+            "Role": "DeploymentValidation"
+          }
+        }
+      ]
+    },
+    "sku": {
+      "value": "StandardV2"
+    },
+    "tags": {
+      "value": {
+        "Environment": "Non-Prod",
+        "hidden-title": "This is visible in the resource name",
+        "Role": "DeploymentValidation"
+      }
+    },
+    "virtualNetworkType": {
+      "value": "None"
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via Bicep parameters file</summary>
+
+```bicep-params
+using 'br/public:avm/res/api-management/service:<version>'
+
+// Required parameters
+param name = 'apispe001'
+param publisherEmail = 'apimgmt-noreply@mail.windowsazure.com'
+param publisherName = 'az-amorg-x-001'
+// Non-required parameters
+param diagnosticSettings = [
+  {
+    eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
+    eventHubName: '<eventHubName>'
+    storageAccountResourceId: '<storageAccountResourceId>'
+    workspaceResourceId: '<workspaceResourceId>'
+  }
+]
+param managedIdentities = {
+  systemAssigned: true
+}
+param privateEndpoints = [
+  {
+    privateDnsZoneGroup: {
+      privateDnsZoneGroupConfigs: [
+        {
+          privateDnsZoneResourceId: '<privateDnsZoneResourceId>'
+        }
+      ]
+    }
+    service: 'Gateway'
+    subnetResourceId: '<subnetResourceId>'
+    tags: {
+      Environment: 'Non-Prod'
+      'hidden-title': 'This is visible in the resource name'
+      Role: 'DeploymentValidation'
+    }
+  }
+]
+param sku = 'StandardV2'
+param tags = {
+  Environment: 'Non-Prod'
+  'hidden-title': 'This is visible in the resource name'
+  Role: 'DeploymentValidation'
+}
+param virtualNetworkType = 'None'
+```
+
+</details>
+<p>
+
+### Example 6: _Deploying an APIM v2 sku_
 
 This instance deploys the module using a v2 SKU.
 
@@ -1176,7 +1328,7 @@ param sku = 'BasicV2'
 </details>
 <p>
 
-### Example 6: _WAF-aligned_
+### Example 7: _WAF-aligned_
 
 This instance deploys the module in alignment with the best-practices of the Azure Well-Architected Framework.
 
@@ -1338,17 +1490,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           enabled: false
         }
       }
-      {
-        name: 'signup'
-        properties: {
-          enabled: false
-          termsOfService: {
-            consentRequired: false
-            enabled: false
-            text: 'Test TOS.'
-          }
-        }
-      }
     ]
     privateEndpoints: [
       {
@@ -1359,6 +1500,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
             }
           ]
         }
+        service: 'Gateway'
         subnetResourceId: '<subnetResourceId>'
         tags: {
           Environment: 'Non-Prod'
@@ -1374,6 +1516,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
             }
           ]
         }
+        service: 'Gateway'
         subnetResourceId: '<subnetResourceId>'
       }
     ]
@@ -1409,6 +1552,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
       'hidden-title': 'This is visible in the resource name'
       Role: 'DeploymentValidation'
     }
+    virtualNetworkType: 'None'
   }
 }
 ```
@@ -1608,17 +1752,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           "properties": {
             "enabled": false
           }
-        },
-        {
-          "name": "signup",
-          "properties": {
-            "enabled": false,
-            "termsOfService": {
-              "consentRequired": false,
-              "enabled": false,
-              "text": "Test TOS."
-            }
-          }
         }
       ]
     },
@@ -1632,6 +1765,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
               }
             ]
           },
+          "service": "Gateway",
           "subnetResourceId": "<subnetResourceId>",
           "tags": {
             "Environment": "Non-Prod",
@@ -1647,6 +1781,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
               }
             ]
           },
+          "service": "Gateway",
           "subnetResourceId": "<subnetResourceId>"
         }
       ]
@@ -1688,6 +1823,9 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         "hidden-title": "This is visible in the resource name",
         "Role": "DeploymentValidation"
       }
+    },
+    "virtualNetworkType": {
+      "value": "None"
     }
   }
 }
@@ -1852,17 +1990,6 @@ param portalsettings = [
       enabled: false
     }
   }
-  {
-    name: 'signup'
-    properties: {
-      enabled: false
-      termsOfService: {
-        consentRequired: false
-        enabled: false
-        text: 'Test TOS.'
-      }
-    }
-  }
 ]
 param privateEndpoints = [
   {
@@ -1873,6 +2000,7 @@ param privateEndpoints = [
         }
       ]
     }
+    service: 'Gateway'
     subnetResourceId: '<subnetResourceId>'
     tags: {
       Environment: 'Non-Prod'
@@ -1888,6 +2016,7 @@ param privateEndpoints = [
         }
       ]
     }
+    service: 'Gateway'
     subnetResourceId: '<subnetResourceId>'
   }
 ]
@@ -1923,6 +2052,7 @@ param tags = {
   'hidden-title': 'This is visible in the resource name'
   Role: 'DeploymentValidation'
 }
+param virtualNetworkType = 'None'
 ```
 
 </details>
@@ -1975,7 +2105,7 @@ param tags = {
 | [`notificationSenderEmail`](#parameter-notificationsenderemail) | string | The notification sender email address for the service. |
 | [`policies`](#parameter-policies) | array | Policies. |
 | [`portalsettings`](#parameter-portalsettings) | array | Portal settings. |
-| [`privateEndpoints`](#parameter-privateendpoints) | array | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints. |
+| [`privateEndpoints`](#parameter-privateendpoints) | array | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints. 'virtualNetworkType' must be set to 'None' (or left empty which defaults to 'None') on initial deployment of Private Endpoints. |
 | [`products`](#parameter-products) | array | Products. |
 | [`publicIpAddressResourceId`](#parameter-publicipaddressresourceid) | string | Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the region. Supported only for Developer and Premium SKUs when deployed in Virtual Network. |
 | [`publicNetworkAccess`](#parameter-publicnetworkaccess) | string | Whether or not public network access is allowed for this resource. For security reasons it should be disabled. Note: Cannot be set to "Disabled" during initial service creation - must be changed post-deployment. If not specified, defaults to "Enabled". |
@@ -3326,7 +3456,7 @@ Portal settings.
 
 ### Parameter: `privateEndpoints`
 
-Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints.
+Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints. 'virtualNetworkType' must be set to 'None' (or left empty which defaults to 'None') on initial deployment of Private Endpoints.
 
 - Required: No
 - Type: array

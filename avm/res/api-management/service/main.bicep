@@ -147,7 +147,7 @@ param policies array?
 param portalsettings array?
 
 import { privateEndpointSingleServiceType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
-@sys.description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints.')
+@sys.description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note: Private endpoints are supported with Developer, Basic, Standard, Premium, BasicV2, and StandardV2 SKUs only. Consumption SKU does not support private endpoints. \'virtualNetworkType\' must be set to \'None\' (or left empty which defaults to \'None\') on initial deployment of Private Endpoints.')
 param privateEndpoints privateEndpointSingleServiceType[]?
 
 @description('Optional. Products.')
@@ -238,12 +238,16 @@ var additionalLocationsSupportedForSku = skuCapabilities[sku].supportsAdditional
 // Validation: Internal VNet mode requires VNet injection support
 var internalVNetRequested = virtualNetworkType == 'Internal'
 
+// Validation: Private endpoints and VNet injection cannot be used together
+var privateEndpointsAndVNetConflict = privateEndpointsRequested && vnetInjectionRequested
+
 // Validation logic - these will cause deployment to fail with clear messages if conditions are violated
 var privateEndpointsAllowed = !privateEndpointsRequested || privateEndpointsSupportedForSku
 var vnetInjectionAllowed = !vnetInjectionRequested || vnetInjectionSupportedForSku
 var publicIpAllowed = !publicIpRequested || (publicIpSupportedForSku && vnetInjectionRequested)
 var additionalLocationsAllowed = !additionalLocationsRequested || additionalLocationsSupportedForSku
 var internalVNetAllowed = !internalVNetRequested || vnetInjectionSupportedForSku
+var privateEndpointsAndVNetAllowed = !privateEndpointsAndVNetConflict
 
 // Error messages for invalid configurations
 var configurationError = !privateEndpointsAllowed
@@ -258,10 +262,12 @@ var configurationError = !privateEndpointsAllowed
                   ? 'Additional locations are only supported with the Premium SKU.'
                   : !internalVNetAllowed
                       ? 'Internal virtual network mode is not supported with the ${sku} SKU. Supported SKUs: Developer, Premium, StandardV2.'
-                      : ''
+                      : !privateEndpointsAndVNetAllowed
+                          ? 'Private endpoints and VNet injection cannot be used together. When using private endpoints, set virtualNetworkType to None and do not provide subnetResourceId.'
+                          : ''
 
 // This will cause the deployment to fail with a clear error message if any validation fails
-var validationPassed = privateEndpointsAllowed && vnetInjectionAllowed && publicIpAllowed && additionalLocationsAllowed && internalVNetAllowed
+var validationPassed = privateEndpointsAllowed && vnetInjectionAllowed && publicIpAllowed && additionalLocationsAllowed && internalVNetAllowed && privateEndpointsAndVNetAllowed
 
 var enableReferencedModulesTelemetry = false
 
@@ -704,15 +710,15 @@ module service_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11
       split(privateEndpoint.?resourceGroupResourceId ?? resourceGroup().id, '/')[4]
     )
     params: {
-      name: privateEndpoint.?name ?? 'pep-${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'service'}-${index}'
+      name: privateEndpoint.?name ?? 'pep-${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'Gateway'}-${index}'
       privateLinkServiceConnections: privateEndpoint.?isManualConnection != true
         ? [
             {
-              name: privateEndpoint.?privateLinkServiceConnectionName ?? '${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'service'}-${index}'
+              name: privateEndpoint.?privateLinkServiceConnectionName ?? '${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'Gateway'}-${index}'
               properties: {
                 privateLinkServiceId: service.id
                 groupIds: [
-                  privateEndpoint.?service ?? 'service'
+                  privateEndpoint.?service ?? 'Gateway'
                 ]
               }
             }
@@ -721,11 +727,11 @@ module service_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11
       manualPrivateLinkServiceConnections: privateEndpoint.?isManualConnection == true
         ? [
             {
-              name: privateEndpoint.?privateLinkServiceConnectionName ?? '${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'service'}-${index}'
+              name: privateEndpoint.?privateLinkServiceConnectionName ?? '${last(split(service.id, '/'))}-${privateEndpoint.?service ?? 'Gateway'}-${index}'
               properties: {
                 privateLinkServiceId: service.id
                 groupIds: [
-                  privateEndpoint.?service ?? 'service'
+                  privateEndpoint.?service ?? 'Gateway'
                 ]
                 requestMessage: privateEndpoint.?manualConnectionRequestMessage ?? 'Manual approval required.'
               }

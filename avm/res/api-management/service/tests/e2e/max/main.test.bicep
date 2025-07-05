@@ -94,7 +94,6 @@ module testDeployment '../../../main.bicep' = [
           }
         }
       ]
-      virtualNetworkType: 'External' // Must be external for initial setup of Private Endpoints
       subnetResourceId: nestedDependencies.outputs.subnetResourceIdRegion1
       publicIpAddressResourceId: nestedDependencies.outputs.publicIPResourceIdRegion1
       apis: [
