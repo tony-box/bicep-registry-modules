@@ -487,12 +487,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
     publicIpAddressResourceId: '<publicIpAddressResourceId>'
     roleAssignments: [
       {
-        name: '6352c3e3-ac6b-43d5-ac43-1077ff373721'
-        principalId: '<principalId>'
-        principalType: 'ServicePrincipal'
-        roleDefinitionIdOrName: 'Owner'
-      }
-      {
         name: '<name>'
         principalId: '<principalId>'
         principalType: 'ServicePrincipal'
@@ -776,12 +770,6 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
     "roleAssignments": {
       "value": [
         {
-          "name": "6352c3e3-ac6b-43d5-ac43-1077ff373721",
-          "principalId": "<principalId>",
-          "principalType": "ServicePrincipal",
-          "roleDefinitionIdOrName": "Owner"
-        },
-        {
           "name": "<name>",
           "principalId": "<principalId>",
           "principalType": "ServicePrincipal",
@@ -1024,12 +1012,6 @@ param products = [
 ]
 param publicIpAddressResourceId = '<publicIpAddressResourceId>'
 param roleAssignments = [
-  {
-    name: '6352c3e3-ac6b-43d5-ac43-1077ff373721'
-    principalId: '<principalId>'
-    principalType: 'ServicePrincipal'
-    roleDefinitionIdOrName: 'Owner'
-  }
   {
     name: '<name>'
     principalId: '<principalId>'
