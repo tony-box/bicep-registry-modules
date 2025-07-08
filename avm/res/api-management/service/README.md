@@ -433,9 +433,25 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
     ]
     portalsettings: [
       {
+        name: 'signup'
+        properties: {
+          enabled: false
+          termsOfService: {
+            consentRequired: false
+            enabled: true
+            text: 'Terms of service text'
+          }
+        }
+      }
+      {
         name: 'signin'
         properties: {
           enabled: false
+          termsOfService: {
+            consentRequired: true
+            enabled: true
+            text: 'Terms of service text'
+          }
         }
       }
     ]
@@ -708,9 +724,25 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
     "portalsettings": {
       "value": [
         {
+          "name": "signup",
+          "properties": {
+            "enabled": false,
+            "termsOfService": {
+              "consentRequired": false,
+              "enabled": true,
+              "text": "Terms of service text"
+            }
+          }
+        },
+        {
           "name": "signin",
           "properties": {
-            "enabled": false
+            "enabled": false,
+            "termsOfService": {
+              "consentRequired": true,
+              "enabled": true,
+              "text": "Terms of service text"
+            }
           }
         }
       ]
@@ -959,9 +991,25 @@ param policies = [
 ]
 param portalsettings = [
   {
+    name: 'signup'
+    properties: {
+      enabled: false
+      termsOfService: {
+        consentRequired: false
+        enabled: true
+        text: 'Terms of service text'
+      }
+    }
+  }
+  {
     name: 'signin'
     properties: {
       enabled: false
+      termsOfService: {
+        consentRequired: true
+        enabled: true
+        text: 'Terms of service text'
+      }
     }
   }
 ]
@@ -1470,6 +1518,11 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         name: 'signin'
         properties: {
           enabled: false
+          termsOfService: {
+            consentRequired: true
+            enabled: true
+            text: 'Terms of service text'
+          }
         }
       }
     ]
@@ -1732,7 +1785,12 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         {
           "name": "signin",
           "properties": {
-            "enabled": false
+            "enabled": false,
+            "termsOfService": {
+              "consentRequired": true,
+              "enabled": true,
+              "text": "Terms of service text"
+            }
           }
         }
       ]
@@ -1970,6 +2028,11 @@ param portalsettings = [
     name: 'signin'
     properties: {
       enabled: false
+      termsOfService: {
+        consentRequired: true
+        enabled: true
+        text: 'Terms of service text'
+      }
     }
   }
 ]
