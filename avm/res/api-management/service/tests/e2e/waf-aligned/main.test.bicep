@@ -220,6 +220,11 @@ module testDeployment '../../../main.bicep' = [
           name: 'signin'
           properties: {
             enabled: false
+            termsOfService: {
+              consentRequired: true
+              enabled: true
+              text: 'Terms of service text'
+            }
           }
         }
       ]
