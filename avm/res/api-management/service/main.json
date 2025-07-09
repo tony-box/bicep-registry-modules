@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "4397330283462245072"
+      "templateHash": "13813960481090169656"
     },
     "name": "API Management Services",
     "description": "This module deploys an API Management Service. The default deployment is set to use a Premium SKU to align with Microsoft WAF-aligned best practices. In most cases, non-prod deployments should use a lower-tier SKU."
@@ -5275,7 +5275,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "11072656710885219513"
+              "templateHash": "7340570155494681173"
             },
             "name": "API Management Service Portal Settings",
             "description": "This module deploys an API Management Service Portal Setting."
@@ -5287,7 +5287,7 @@
                 "enabled": {
                   "type": "bool",
                   "metadata": {
-                    "description": "Conditional. Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal."
+                    "description": "Required. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal."
                   }
                 },
                 "termsOfService": {
@@ -5313,7 +5313,7 @@
                     }
                   },
                   "metadata": {
-                    "description": "Conditional. Required if 'name' is 'signup'."
+                    "description": "Required. Terms of service contract properties."
                   }
                 },
                 "subscriptions": {
@@ -5327,13 +5327,13 @@
                     }
                   },
                   "metadata": {
-                    "description": "Conditional. Required if 'name' is 'delegation'. Subscriptions delegation settings."
+                    "description": "Required. Subscriptions delegation settings."
                   }
                 },
                 "url": {
                   "type": "string",
                   "metadata": {
-                    "description": "Conditional. Required if 'name' is 'delegation'. A delegation Url."
+                    "description": "Required. A delegation Url."
                   }
                 },
                 "userRegistration": {
@@ -5347,13 +5347,13 @@
                     }
                   },
                   "metadata": {
-                    "description": "Conditional. Required if 'name' is 'delegation'. User registration delegation settings."
+                    "description": "Required. User registration delegation settings."
                   }
                 },
                 "validationKey": {
                   "type": "securestring",
                   "metadata": {
-                    "description": "Conditional. Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management."
+                    "description": "Required. A base64-encoded validation key to validate, that a request is coming from Azure API Management."
                   }
                 }
               }
@@ -5380,7 +5380,7 @@
             "properties": {
               "$ref": "#/definitions/portalSettingPropertiesType",
               "metadata": {
-                "description": "Required. Portal setting properties."
+                "description": "Required. Portal setting properties. Strings may be left empty, but must not be omitted."
               }
             }
           },

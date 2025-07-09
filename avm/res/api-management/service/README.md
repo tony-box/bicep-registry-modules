@@ -436,22 +436,38 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         name: 'signup'
         properties: {
           enabled: false
+          subscriptions: {
+            enabled: false
+          }
           termsOfService: {
-            consentRequired: false
+            consentRequired: true
             enabled: true
             text: 'Terms of service text'
           }
+          url: ''
+          userRegistration: {
+            enabled: false
+          }
+          validationKey: ''
         }
       }
       {
         name: 'signin'
         properties: {
           enabled: false
+          subscriptions: {
+            enabled: false
+          }
           termsOfService: {
             consentRequired: true
             enabled: true
             text: 'Terms of service text'
           }
+          url: ''
+          userRegistration: {
+            enabled: false
+          }
+          validationKey: ''
         }
       }
     ]
@@ -727,22 +743,38 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           "name": "signup",
           "properties": {
             "enabled": false,
+            "subscriptions": {
+              "enabled": false
+            },
             "termsOfService": {
-              "consentRequired": false,
+              "consentRequired": true,
               "enabled": true,
               "text": "Terms of service text"
-            }
+            },
+            "url": "",
+            "userRegistration": {
+              "enabled": false
+            },
+            "validationKey": ""
           }
         },
         {
           "name": "signin",
           "properties": {
             "enabled": false,
+            "subscriptions": {
+              "enabled": false
+            },
             "termsOfService": {
               "consentRequired": true,
               "enabled": true,
               "text": "Terms of service text"
-            }
+            },
+            "url": "",
+            "userRegistration": {
+              "enabled": false
+            },
+            "validationKey": ""
           }
         }
       ]
@@ -994,22 +1026,38 @@ param portalsettings = [
     name: 'signup'
     properties: {
       enabled: false
+      subscriptions: {
+        enabled: false
+      }
       termsOfService: {
-        consentRequired: false
+        consentRequired: true
         enabled: true
         text: 'Terms of service text'
       }
+      url: ''
+      userRegistration: {
+        enabled: false
+      }
+      validationKey: ''
     }
   }
   {
     name: 'signin'
     properties: {
       enabled: false
+      subscriptions: {
+        enabled: false
+      }
       termsOfService: {
         consentRequired: true
         enabled: true
         text: 'Terms of service text'
       }
+      url: ''
+      userRegistration: {
+        enabled: false
+      }
+      validationKey: ''
     }
   }
 ]
@@ -1515,14 +1563,60 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
     ]
     portalsettings: [
       {
-        name: 'signin'
+        name: 'signup'
         properties: {
           enabled: false
+          subscriptions: {
+            enabled: false
+          }
           termsOfService: {
             consentRequired: true
             enabled: true
             text: 'Terms of service text'
           }
+          url: ''
+          userRegistration: {
+            enabled: false
+          }
+          validationKey: ''
+        }
+      }
+      {
+        name: 'signin'
+        properties: {
+          enabled: false
+          subscriptions: {
+            enabled: false
+          }
+          termsOfService: {
+            consentRequired: true
+            enabled: true
+            text: 'Terms of service text'
+          }
+          url: ''
+          userRegistration: {
+            enabled: false
+          }
+          validationKey: ''
+        }
+      }
+      {
+        name: 'delegation'
+        properties: {
+          enabled: false
+          subscriptions: {
+            enabled: false
+          }
+          termsOfService: {
+            consentRequired: false
+            enabled: false
+            text: ''
+          }
+          url: ''
+          userRegistration: {
+            enabled: false
+          }
+          validationKey: ''
         }
       }
     ]
@@ -1783,14 +1877,60 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
     "portalsettings": {
       "value": [
         {
-          "name": "signin",
+          "name": "signup",
           "properties": {
             "enabled": false,
+            "subscriptions": {
+              "enabled": false
+            },
             "termsOfService": {
               "consentRequired": true,
               "enabled": true,
               "text": "Terms of service text"
-            }
+            },
+            "url": "",
+            "userRegistration": {
+              "enabled": false
+            },
+            "validationKey": ""
+          }
+        },
+        {
+          "name": "signin",
+          "properties": {
+            "enabled": false,
+            "subscriptions": {
+              "enabled": false
+            },
+            "termsOfService": {
+              "consentRequired": true,
+              "enabled": true,
+              "text": "Terms of service text"
+            },
+            "url": "",
+            "userRegistration": {
+              "enabled": false
+            },
+            "validationKey": ""
+          }
+        },
+        {
+          "name": "delegation",
+          "properties": {
+            "enabled": false,
+            "subscriptions": {
+              "enabled": false
+            },
+            "termsOfService": {
+              "consentRequired": false,
+              "enabled": false,
+              "text": ""
+            },
+            "url": "",
+            "userRegistration": {
+              "enabled": false
+            },
+            "validationKey": ""
           }
         }
       ]
@@ -2025,14 +2165,60 @@ param policies = [
 ]
 param portalsettings = [
   {
-    name: 'signin'
+    name: 'signup'
     properties: {
       enabled: false
+      subscriptions: {
+        enabled: false
+      }
       termsOfService: {
         consentRequired: true
         enabled: true
         text: 'Terms of service text'
       }
+      url: ''
+      userRegistration: {
+        enabled: false
+      }
+      validationKey: ''
+    }
+  }
+  {
+    name: 'signin'
+    properties: {
+      enabled: false
+      subscriptions: {
+        enabled: false
+      }
+      termsOfService: {
+        consentRequired: true
+        enabled: true
+        text: 'Terms of service text'
+      }
+      url: ''
+      userRegistration: {
+        enabled: false
+      }
+      validationKey: ''
+    }
+  }
+  {
+    name: 'delegation'
+    properties: {
+      enabled: false
+      subscriptions: {
+        enabled: false
+      }
+      termsOfService: {
+        consentRequired: false
+        enabled: false
+        text: ''
+      }
+      url: ''
+      userRegistration: {
+        enabled: false
+      }
+      validationKey: ''
     }
   }
 ]

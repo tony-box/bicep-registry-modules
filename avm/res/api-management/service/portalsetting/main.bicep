@@ -12,7 +12,7 @@ param apiManagementServiceName string
 ])
 param name string
 
-@description('Required. Portal setting properties.')
+@description('Required. Portal setting properties. Strings may be left empty, but must not be omitted.')
 param properties portalSettingPropertiesType
 
 resource service 'Microsoft.ApiManagement/service@2024-05-01' existing = {
@@ -39,10 +39,10 @@ output resourceGroupName string = resourceGroup().name
 // ================ //
 
 type portalSettingPropertiesType = {
-  @sys.description('Conditional. Required if \'name\' is \'signin\' or \'signup\'. \'signin\': Redirect Anonymous users to the Sign-In page. \'signup\': Allow users to sign up on a developer portal.')
+  @sys.description('Required. \'signin\': Redirect Anonymous users to the Sign-In page. \'signup\': Allow users to sign up on a developer portal.')
   enabled: bool
 
-  @sys.description('Conditional. Required if \'name\' is \'signup\'.')
+  @sys.description('Required. Terms of service contract properties.')
   termsOfService: {
     @sys.description('Required. Ask user for consent to the terms of service.')
     consentRequired: bool
@@ -52,22 +52,22 @@ type portalSettingPropertiesType = {
     text: string
   }
 
-  @sys.description('Conditional. Required if \'name\' is \'delegation\'. Subscriptions delegation settings.')
+  @sys.description('Required. Subscriptions delegation settings.')
   subscriptions: {
     @sys.description('Required. Enable or disable delegation for subscriptions.')
     enabled: bool
   }
 
-  @sys.description('Conditional. Required if \'name\' is \'delegation\'. A delegation Url.')
+  @sys.description('Required. A delegation Url.')
   url: string
 
-  @sys.description('Conditional. Required if \'name\' is \'delegation\'. User registration delegation settings.')
+  @sys.description('Required. User registration delegation settings.')
   userRegistration: {
     @sys.description('Required. Enable or disable delegation for user registration.')
     enabled: bool
   }
 
   @secure()
-  @description('Conditional. Required if \'name\' is \'delegation\'. A base64-encoded validation key to validate, that a request is coming from Azure API Management.')
+  @description('Required. A base64-encoded validation key to validate, that a request is coming from Azure API Management.')
   validationKey: string
 }

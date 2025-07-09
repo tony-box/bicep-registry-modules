@@ -218,10 +218,18 @@ module testDeployment '../../../main.bicep' = [
           properties: {
             enabled: false
             termsOfService: {
-              consentRequired: false
+              consentRequired: true
               enabled: true
               text: 'Terms of service text'
             }
+            subscriptions: {
+              enabled: false
+            }
+            url: ''
+            userRegistration: {
+              enabled: false
+            }
+            validationKey: ''
           }
         }
         {
@@ -233,6 +241,14 @@ module testDeployment '../../../main.bicep' = [
               enabled: true
               text: 'Terms of service text'
             }
+            subscriptions: {
+              enabled: false
+            }
+            url: ''
+            userRegistration: {
+              enabled: false
+            }
+            validationKey: ''
           }
         }
       ]

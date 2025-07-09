@@ -217,6 +217,25 @@ module testDeployment '../../../main.bicep' = [
       ]
       portalsettings: [
         {
+          name: 'signup'
+          properties: {
+            enabled: false
+            termsOfService: {
+              consentRequired: true
+              enabled: true
+              text: 'Terms of service text'
+            }
+            subscriptions: {
+              enabled: false
+            }
+            url: ''
+            userRegistration: {
+              enabled: false
+            }
+            validationKey: ''
+          }
+        }
+        {
           name: 'signin'
           properties: {
             enabled: false
@@ -225,6 +244,33 @@ module testDeployment '../../../main.bicep' = [
               enabled: true
               text: 'Terms of service text'
             }
+            subscriptions: {
+              enabled: false
+            }
+            url: ''
+            userRegistration: {
+              enabled: false
+            }
+            validationKey: ''
+          }
+        }
+        {
+          name: 'delegation'
+          properties: {
+            enabled: false
+            termsOfService: {
+              consentRequired: false
+              enabled: false
+              text: ''
+            }
+            subscriptions: {
+              enabled: false
+            }
+            url: ''
+            userRegistration: {
+              enabled: false
+            }
+            validationKey: ''
           }
         }
       ]

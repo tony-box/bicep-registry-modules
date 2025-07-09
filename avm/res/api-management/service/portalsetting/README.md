@@ -21,7 +21,7 @@ This module deploys an API Management Service Portal Setting.
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`name`](#parameter-name) | string | Portal setting name. |
-| [`properties`](#parameter-properties) | object | Portal setting properties. |
+| [`properties`](#parameter-properties) | object | Portal setting properties. Strings may be left empty, but must not be omitted. |
 
 **Conditional parameters**
 
@@ -46,32 +46,32 @@ Portal setting name.
 
 ### Parameter: `properties`
 
-Portal setting properties.
+Portal setting properties. Strings may be left empty, but must not be omitted.
 
 - Required: Yes
 - Type: object
 
-**Conditional parameters**
+**Required parameters**
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`enabled`](#parameter-propertiesenabled) | bool | Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal. |
-| [`subscriptions`](#parameter-propertiessubscriptions) | object | Required if 'name' is 'delegation'. Subscriptions delegation settings. |
-| [`termsOfService`](#parameter-propertiestermsofservice) | object | Required if 'name' is 'signup'. |
-| [`url`](#parameter-propertiesurl) | string | Required if 'name' is 'delegation'. A delegation Url. |
-| [`userRegistration`](#parameter-propertiesuserregistration) | object | Required if 'name' is 'delegation'. User registration delegation settings. |
-| [`validationKey`](#parameter-propertiesvalidationkey) | securestring | Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management. |
+| [`enabled`](#parameter-propertiesenabled) | bool | 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal. |
+| [`subscriptions`](#parameter-propertiessubscriptions) | object | Subscriptions delegation settings. |
+| [`termsOfService`](#parameter-propertiestermsofservice) | object | Terms of service contract properties. |
+| [`url`](#parameter-propertiesurl) | string | A delegation Url. |
+| [`userRegistration`](#parameter-propertiesuserregistration) | object | User registration delegation settings. |
+| [`validationKey`](#parameter-propertiesvalidationkey) | securestring | A base64-encoded validation key to validate, that a request is coming from Azure API Management. |
 
 ### Parameter: `properties.enabled`
 
-Required if 'name' is 'signin' or 'signup'. 'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal.
+'signin': Redirect Anonymous users to the Sign-In page. 'signup': Allow users to sign up on a developer portal.
 
 - Required: Yes
 - Type: bool
 
 ### Parameter: `properties.subscriptions`
 
-Required if 'name' is 'delegation'. Subscriptions delegation settings.
+Subscriptions delegation settings.
 
 - Required: Yes
 - Type: object
@@ -91,7 +91,7 @@ Enable or disable delegation for subscriptions.
 
 ### Parameter: `properties.termsOfService`
 
-Required if 'name' is 'signup'.
+Terms of service contract properties.
 
 - Required: Yes
 - Type: object
@@ -127,14 +127,14 @@ A terms of service text.
 
 ### Parameter: `properties.url`
 
-Required if 'name' is 'delegation'. A delegation Url.
+A delegation Url.
 
 - Required: Yes
 - Type: string
 
 ### Parameter: `properties.userRegistration`
 
-Required if 'name' is 'delegation'. User registration delegation settings.
+User registration delegation settings.
 
 - Required: Yes
 - Type: object
@@ -154,7 +154,7 @@ Enable or disable delegation for user registration.
 
 ### Parameter: `properties.validationKey`
 
-Required if 'name' is 'delegation'. A base64-encoded validation key to validate, that a request is coming from Azure API Management.
+A base64-encoded validation key to validate, that a request is coming from Azure API Management.
 
 - Required: Yes
 - Type: securestring
