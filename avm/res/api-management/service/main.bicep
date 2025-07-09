@@ -75,7 +75,7 @@ param roleAssignments roleAssignmentType[]?
   'StandardV2'
   'BasicV2'
 ])
-param sku string = 'StandardV2'
+param sku string = 'Premium'
 
 @description('Conditional. The scale units for this API Management service. Required if using Basic, Standard, or Premium skus. For range of capacities for each sku, reference https://azure.microsoft.com/en-us/pricing/details/api-management/.')
 param skuCapacity int = 3

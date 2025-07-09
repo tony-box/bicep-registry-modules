@@ -3,7 +3,7 @@ targetScope = 'subscription'
 metadata name = 'WAF-aligned'
 metadata description = 'This instance deploys the module in alignment with the best-practices of the Azure Well-Architected Framework.'
 
-// ========== //sk
+// ========== //
 // Parameters //
 // ========== //
 
@@ -82,7 +82,7 @@ module testDeployment '../../../main.bicep' = [
         {
           location: secondaryEnforcedLocation
           sku: {
-            name: 'StandardV2'
+            name: 'Premium'
             capacity: 3
           }
           availabilityZones: [
