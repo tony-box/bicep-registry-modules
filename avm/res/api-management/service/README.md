@@ -530,6 +530,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         roleDefinitionIdOrName: '<roleDefinitionIdOrName>'
       }
     ]
+    sku: 'Premium'
     subnetResourceId: '<subnetResourceId>'
     subscriptions: [
       {
@@ -846,6 +847,9 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         }
       ]
     },
+    "sku": {
+      "value": "Premium"
+    },
     "subnetResourceId": {
       "value": "<subnetResourceId>"
     },
@@ -1120,6 +1124,7 @@ param roleAssignments = [
     roleDefinitionIdOrName: '<roleDefinitionIdOrName>'
   }
 ]
+param sku = 'Premium'
 param subnetResourceId = '<subnetResourceId>'
 param subscriptions = [
   {
@@ -1435,7 +1440,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
         location: '<location>'
         sku: {
           capacity: 3
-          name: 'Premium'
+          name: 'StandardV2'
         }
       }
     ]
@@ -1721,7 +1726,7 @@ module service 'br/public:avm/res/api-management/service:<version>' = {
           "location": "<location>",
           "sku": {
             "capacity": 3,
-            "name": "Premium"
+            "name": "StandardV2"
           }
         }
       ]
@@ -2037,7 +2042,7 @@ param additionalLocations = [
     location: '<location>'
     sku: {
       capacity: 3
-      name: 'Premium'
+      name: 'StandardV2'
     }
   }
 ]
@@ -4245,7 +4250,7 @@ The pricing tier of this API Management service.
 
 - Required: No
 - Type: string
-- Default: `'Premium'`
+- Default: `'StandardV2'`
 - Allowed:
   ```Bicep
   [

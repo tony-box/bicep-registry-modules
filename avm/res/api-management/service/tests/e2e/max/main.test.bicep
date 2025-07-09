@@ -94,6 +94,7 @@ module testDeployment '../../../main.bicep' = [
           }
         }
       ]
+      sku: 'Premium'
       subnetResourceId: nestedDependencies.outputs.subnetResourceIdRegion1
       publicIpAddressResourceId: nestedDependencies.outputs.publicIPResourceIdRegion1
       apis: [
