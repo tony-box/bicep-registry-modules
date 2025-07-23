@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.36.1.42791",
-      "templateHash": "5632478109180131042"
+      "version": "0.36.177.2456",
+      "templateHash": "15557936375803853749"
     },
     "name": "API Management Service Identity Providers",
     "description": "This module deploys an API Management Service Identity Provider."

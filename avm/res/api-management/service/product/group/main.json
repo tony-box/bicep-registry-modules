@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.36.1.42791",
-      "templateHash": "5464633905664098351"
+      "version": "0.36.177.2456",
+      "templateHash": "3311397084860793975"
     },
     "name": "API Management Service Products Groups",
     "description": "This module deploys an API Management Service Product Group."

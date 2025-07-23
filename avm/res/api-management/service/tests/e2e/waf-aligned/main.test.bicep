@@ -254,25 +254,6 @@ module testDeployment '../../../main.bicep' = [
             validationKey: ''
           }
         }
-        {
-          name: 'delegation'
-          properties: {
-            enabled: false
-            termsOfService: {
-              consentRequired: false
-              enabled: false
-              text: ''
-            }
-            subscriptions: {
-              enabled: false
-            }
-            url: ''
-            userRegistration: {
-              enabled: false
-            }
-            validationKey: ''
-          }
-        }
       ]
       privateEndpoints: [
         {
