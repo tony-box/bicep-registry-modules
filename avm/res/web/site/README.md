@@ -20,8 +20,6 @@ This module deploys a Web or Function App.
 | `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
 | `Microsoft.Insights/diagnosticSettings` | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings) |
 | `Microsoft.Network/privateEndpoints` | [2024-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-05-01/privateEndpoints) |
-| `Microsoft.Network/privateEndpoints` | [2023-11-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-11-01/privateEndpoints) |
-| `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2023-11-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-11-01/privateEndpoints/privateDnsZoneGroups) |
 | `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2024-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-05-01/privateEndpoints/privateDnsZoneGroups) |
 | `Microsoft.Web/sites` | [2024-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Web/2024-04-01/sites) |
 | `Microsoft.Web/sites/basicPublishingCredentialsPolicies` | [2024-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Web/2024-04-01/sites/basicPublishingCredentialsPolicies) |
@@ -46,11 +44,12 @@ The following section provides usage examples for the module, which were used to
 - [Function App, using large parameter set](#example-2-function-app-using-large-parameter-set)
 - [Linux Container Web App, using only defaults](#example-3-linux-container-web-app-using-only-defaults)
 - [WAF-aligned](#example-4-waf-aligned)
-- [Web App, using only defaults](#example-5-web-app-using-only-defaults)
-- [Web App, using large parameter set](#example-6-web-app-using-large-parameter-set)
-- [Linux Web App, using only defaults](#example-7-linux-web-app-using-only-defaults)
-- [Linux Web App, using large parameter set](#example-8-linux-web-app-using-large-parameter-set)
-- [Windows Web App for Containers, using only defaults](#example-9-windows-web-app-for-containers-using-only-defaults)
+- [Access Restrictions](#example-5-access-restrictions)
+- [Web App, using only defaults](#example-6-web-app-using-only-defaults)
+- [Web App, using large parameter set](#example-7-web-app-using-large-parameter-set)
+- [Linux Web App, using only defaults](#example-8-linux-web-app-using-only-defaults)
+- [Linux Web App, using large parameter set](#example-9-linux-web-app-using-large-parameter-set)
+- [Windows Web App for Containers, using only defaults](#example-10-windows-web-app-for-containers-using-only-defaults)
 
 ### Example 1: _Function App, using only defaults_
 
@@ -1021,7 +1020,238 @@ param vnetRouteAllEnabled = true
 </details>
 <p>
 
-### Example 5: _Web App, using only defaults_
+### Example 5: _Access Restrictions_
+
+This instance deploys the module demonstrating access restrictions for Front Door and Application Gateway scenarios.
+
+
+<details>
+
+<summary>via Bicep module</summary>
+
+```bicep
+module site 'br/public:avm/res/web/site:<version>' = {
+  name: 'siteDeployment'
+  params: {
+    // Required parameters
+    kind: 'app'
+    name: 'wsacr001'
+    serverFarmResourceId: '<serverFarmResourceId>'
+    // Non-required parameters
+    configs: [
+      {
+        name: 'web'
+        properties: {
+          ipSecurityRestrictions: [
+            {
+              action: 'Allow'
+              description: 'Allow access from Azure Front Door'
+              ipAddress: 'AzureFrontDoor.Backend'
+              name: 'Azure Front Door'
+              priority: 100
+              tag: 'ServiceTag'
+            }
+            {
+              action: 'Allow'
+              description: 'Allow access from Application Gateway'
+              ipAddress: 'GatewayManager'
+              name: 'Application Gateway'
+              priority: 200
+              tag: 'ServiceTag'
+            }
+            {
+              action: 'Allow'
+              description: 'Allow access from office network'
+              ipAddress: '203.0.113.0/24'
+              name: 'Office Network'
+              priority: 300
+            }
+            {
+              action: 'Allow'
+              description: 'Allow specific Front Door instance with X-Azure-FDID header'
+              headers: {
+                'x-azure-fdid': [
+                  'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+                ]
+              }
+              ipAddress: 'AzureFrontDoor.Backend'
+              name: 'Specific Front Door Instance'
+              priority: 400
+              tag: 'ServiceTag'
+            }
+          ]
+          ipSecurityRestrictionsDefaultAction: 'Allow'
+        }
+      }
+    ]
+    httpsOnly: true
+    siteConfig: {
+      alwaysOn: true
+      ftpsState: 'FtpsOnly'
+      minTlsVersion: '1.2'
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via JSON parameters file</summary>
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    // Required parameters
+    "kind": {
+      "value": "app"
+    },
+    "name": {
+      "value": "wsacr001"
+    },
+    "serverFarmResourceId": {
+      "value": "<serverFarmResourceId>"
+    },
+    // Non-required parameters
+    "configs": {
+      "value": [
+        {
+          "name": "web",
+          "properties": {
+            "ipSecurityRestrictions": [
+              {
+                "action": "Allow",
+                "description": "Allow access from Azure Front Door",
+                "ipAddress": "AzureFrontDoor.Backend",
+                "name": "Azure Front Door",
+                "priority": 100,
+                "tag": "ServiceTag"
+              },
+              {
+                "action": "Allow",
+                "description": "Allow access from Application Gateway",
+                "ipAddress": "GatewayManager",
+                "name": "Application Gateway",
+                "priority": 200,
+                "tag": "ServiceTag"
+              },
+              {
+                "action": "Allow",
+                "description": "Allow access from office network",
+                "ipAddress": "203.0.113.0/24",
+                "name": "Office Network",
+                "priority": 300
+              },
+              {
+                "action": "Allow",
+                "description": "Allow specific Front Door instance with X-Azure-FDID header",
+                "headers": {
+                  "x-azure-fdid": [
+                    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                  ]
+                },
+                "ipAddress": "AzureFrontDoor.Backend",
+                "name": "Specific Front Door Instance",
+                "priority": 400,
+                "tag": "ServiceTag"
+              }
+            ],
+            "ipSecurityRestrictionsDefaultAction": "Allow"
+          }
+        }
+      ]
+    },
+    "httpsOnly": {
+      "value": true
+    },
+    "siteConfig": {
+      "value": {
+        "alwaysOn": true,
+        "ftpsState": "FtpsOnly",
+        "minTlsVersion": "1.2"
+      }
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via Bicep parameters file</summary>
+
+```bicep-params
+using 'br/public:avm/res/web/site:<version>'
+
+// Required parameters
+param kind = 'app'
+param name = 'wsacr001'
+param serverFarmResourceId = '<serverFarmResourceId>'
+// Non-required parameters
+param configs = [
+  {
+    name: 'web'
+    properties: {
+      ipSecurityRestrictions: [
+        {
+          action: 'Allow'
+          description: 'Allow access from Azure Front Door'
+          ipAddress: 'AzureFrontDoor.Backend'
+          name: 'Azure Front Door'
+          priority: 100
+          tag: 'ServiceTag'
+        }
+        {
+          action: 'Allow'
+          description: 'Allow access from Application Gateway'
+          ipAddress: 'GatewayManager'
+          name: 'Application Gateway'
+          priority: 200
+          tag: 'ServiceTag'
+        }
+        {
+          action: 'Allow'
+          description: 'Allow access from office network'
+          ipAddress: '203.0.113.0/24'
+          name: 'Office Network'
+          priority: 300
+        }
+        {
+          action: 'Allow'
+          description: 'Allow specific Front Door instance with X-Azure-FDID header'
+          headers: {
+            'x-azure-fdid': [
+              'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+            ]
+          }
+          ipAddress: 'AzureFrontDoor.Backend'
+          name: 'Specific Front Door Instance'
+          priority: 400
+          tag: 'ServiceTag'
+        }
+      ]
+      ipSecurityRestrictionsDefaultAction: 'Allow'
+    }
+  }
+]
+param httpsOnly = true
+param siteConfig = {
+  alwaysOn: true
+  ftpsState: 'FtpsOnly'
+  minTlsVersion: '1.2'
+}
+```
+
+</details>
+<p>
+
+### Example 6: _Web App, using only defaults_
 
 This instance deploys the module as Web App with the minimum set of required parameters.
 
@@ -1087,7 +1317,7 @@ param serverFarmResourceId = '<serverFarmResourceId>'
 </details>
 <p>
 
-### Example 6: _Web App, using large parameter set_
+### Example 7: _Web App, using large parameter set_
 
 This instance deploys the module as Web App with most of its features enabled.
 
@@ -1990,7 +2220,7 @@ param vnetRouteAllEnabled = true
 </details>
 <p>
 
-### Example 7: _Linux Web App, using only defaults_
+### Example 8: _Linux Web App, using only defaults_
 
 This instance deploys the module as a Linux Web App with the minimum set of required parameters.
 
@@ -2056,7 +2286,7 @@ param serverFarmResourceId = '<serverFarmResourceId>'
 </details>
 <p>
 
-### Example 8: _Linux Web App, using large parameter set_
+### Example 9: _Linux Web App, using large parameter set_
 
 This instance deploys the module asa Linux Web App with most of its features enabled.
 
@@ -2777,7 +3007,7 @@ param vnetRouteAllEnabled = true
 </details>
 <p>
 
-### Example 9: _Windows Web App for Containers, using only defaults_
+### Example 10: _Windows Web App for Containers, using only defaults_
 
 This instance deploys the module as a Windows based Container Web App with the minimum set of required parameters.
 
@@ -2931,7 +3161,7 @@ param siteConfig = {
 | [`slots`](#parameter-slots) | array | Configuration for deployment slots for an app. |
 | [`storageAccountRequired`](#parameter-storageaccountrequired) | bool | Checks if Customer provided storage account is required. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
-| [`virtualNetworkSubnetId`](#parameter-virtualnetworksubnetid) | string | Azure Resource Manager ID of the Virtual network and subnet to be joined by Regional VNET Integration. This must be of the form /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}. |
+| [`virtualNetworkSubnetResourceId`](#parameter-virtualnetworksubnetresourceid) | string | Azure Resource Manager ID of the Virtual network and subnet to be joined by Regional VNET Integration. This must be of the form /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}. |
 | [`vnetContentShareEnabled`](#parameter-vnetcontentshareenabled) | bool | To enable accessing content over virtual network. |
 | [`vnetImagePullEnabled`](#parameter-vnetimagepullenabled) | bool | To enable pulling image over Virtual Network. |
 | [`vnetRouteAllEnabled`](#parameter-vnetrouteallenabled) | bool | Virtual Network Route All enabled. This causes all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied. |
@@ -7780,6 +8010,7 @@ The lock settings of the service.
 | :-- | :-- | :-- |
 | [`kind`](#parameter-lockkind) | string | Specify the type of lock. |
 | [`name`](#parameter-lockname) | string | Specify the name of lock. |
+| [`notes`](#parameter-locknotes) | string | Specify the notes of the lock. |
 
 ### Parameter: `lock.kind`
 
@@ -7799,6 +8030,13 @@ Specify the type of lock.
 ### Parameter: `lock.name`
 
 Specify the name of lock.
+
+- Required: No
+- Type: string
+
+### Parameter: `lock.notes`
+
+Specify the notes of the lock.
 
 - Required: No
 - Type: string
@@ -8017,6 +8255,7 @@ Specify the type of lock.
 | :-- | :-- | :-- |
 | [`kind`](#parameter-privateendpointslockkind) | string | Specify the type of lock. |
 | [`name`](#parameter-privateendpointslockname) | string | Specify the name of lock. |
+| [`notes`](#parameter-privateendpointslocknotes) | string | Specify the notes of the lock. |
 
 ### Parameter: `privateEndpoints.lock.kind`
 
@@ -8036,6 +8275,13 @@ Specify the type of lock.
 ### Parameter: `privateEndpoints.lock.name`
 
 Specify the name of lock.
+
+- Required: No
+- Type: string
+
+### Parameter: `privateEndpoints.lock.notes`
+
+Specify the notes of the lock.
 
 - Required: No
 - Type: string
@@ -8449,7 +8695,7 @@ Configuration for deployment slots for an app.
 | [`siteConfig`](#parameter-slotssiteconfig) | object | The site config object. |
 | [`storageAccountRequired`](#parameter-slotsstorageaccountrequired) | bool | Checks if Customer provided storage account is required. |
 | [`tags`](#parameter-slotstags) | object | Tags of the resource. |
-| [`virtualNetworkSubnetId`](#parameter-slotsvirtualnetworksubnetid) | string | Azure Resource Manager ID of the Virtual network and subnet to be joined by Regional VNET Integration. This must be of the form /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}. |
+| [`virtualNetworkSubnetResourceId`](#parameter-slotsvirtualnetworksubnetresourceid) | string | Azure Resource Manager ID of the Virtual network and subnet to be joined by Regional VNET Integration. This must be of the form /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}. |
 | [`vnetContentShareEnabled`](#parameter-slotsvnetcontentshareenabled) | bool | To enable accessing content over virtual network. |
 | [`vnetImagePullEnabled`](#parameter-slotsvnetimagepullenabled) | bool | To enable pulling image over Virtual Network. |
 | [`vnetRouteAllEnabled`](#parameter-slotsvnetrouteallenabled) | bool | Virtual Network Route All enabled. This causes all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied. |
@@ -13231,6 +13477,7 @@ The lock settings of the service.
 | :-- | :-- | :-- |
 | [`kind`](#parameter-slotslockkind) | string | Specify the type of lock. |
 | [`name`](#parameter-slotslockname) | string | Specify the name of lock. |
+| [`notes`](#parameter-slotslocknotes) | string | Specify the notes of the lock. |
 
 ### Parameter: `slots.lock.kind`
 
@@ -13250,6 +13497,13 @@ Specify the type of lock.
 ### Parameter: `slots.lock.name`
 
 Specify the name of lock.
+
+- Required: No
+- Type: string
+
+### Parameter: `slots.lock.notes`
+
+Specify the notes of the lock.
 
 - Required: No
 - Type: string
@@ -13461,6 +13715,7 @@ Specify the type of lock.
 | :-- | :-- | :-- |
 | [`kind`](#parameter-slotsprivateendpointslockkind) | string | Specify the type of lock. |
 | [`name`](#parameter-slotsprivateendpointslockname) | string | Specify the name of lock. |
+| [`notes`](#parameter-slotsprivateendpointslocknotes) | string | Specify the notes of the lock. |
 
 ### Parameter: `slots.privateEndpoints.lock.kind`
 
@@ -13480,6 +13735,13 @@ Specify the type of lock.
 ### Parameter: `slots.privateEndpoints.lock.name`
 
 Specify the name of lock.
+
+- Required: No
+- Type: string
+
+### Parameter: `slots.privateEndpoints.lock.notes`
+
+Specify the notes of the lock.
 
 - Required: No
 - Type: string
@@ -13839,7 +14101,7 @@ Tags of the resource.
 - Required: No
 - Type: object
 
-### Parameter: `slots.virtualNetworkSubnetId`
+### Parameter: `slots.virtualNetworkSubnetResourceId`
 
 Azure Resource Manager ID of the Virtual network and subnet to be joined by Regional VNET Integration. This must be of the form /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
 
@@ -13882,7 +14144,7 @@ Tags of the resource.
 - Required: No
 - Type: object
 
-### Parameter: `virtualNetworkSubnetId`
+### Parameter: `virtualNetworkSubnetResourceId`
 
 Azure Resource Manager ID of the Virtual network and subnet to be joined by Regional VNET Integration. This must be of the form /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
 
@@ -13934,9 +14196,8 @@ This section gives you an overview of all local-referenced module files (i.e., o
 
 | Reference | Type |
 | :-- | :-- |
-| `br/public:avm/res/network/private-endpoint:0.10.1` | Remote reference |
 | `br/public:avm/res/network/private-endpoint:0.11.0` | Remote reference |
-| `br/public:avm/utl/types/avm-common-types:0.5.1` | Remote reference |
+| `br/public:avm/utl/types/avm-common-types:0.6.0` | Remote reference |
 
 ## Notes
 
